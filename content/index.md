@@ -35,12 +35,14 @@ Latest from the [[blog/index|blog]]:
 
 ## Recently in the garden
 
-<!-- keep to ~5 most recent notes; newest first -->
-
+<!-- Updated automatically by scripts/capture.py; keep the markers. -->
+<!-- RECENT-NOTES:START -->
 - [[notes/bellingcat-geolocation|Geolocation techniques (Bellingcat)]]
 - [[notes/karpathy-english-programming-tweet|The hottest new programming language is English]]
 - [[notes/dwarkesh-sholto-trenton|Sholto & Trenton on how LLMs work]]
 - [[notes/acquired-jensen-huang|Jensen Huang interview (Acquired)]]
 - [[notes/jl-collins-stock-series|The Stock Series (JL Collins)]]
+<!-- RECENT-NOTES:END -->
+
 
 …or browse the whole [[notes/index|garden]].

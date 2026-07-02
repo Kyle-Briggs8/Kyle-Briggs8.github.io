@@ -1,0 +1,20 @@
+name: 📥 Capture URL
+description: Save a link to the digital garden (processed automatically)
+title: "[capture]"
+labels: [capture]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: URL
+      description: The article / video / tweet / podcast episode to save
+      placeholder: https://…
+    validations:
+      required: true
+  - type: textarea
+    id: thought
+    attributes:
+      label: Quick thought (optional)
+      description: Dropped into the note's "My thoughts" section
+    validations:
+      required: false

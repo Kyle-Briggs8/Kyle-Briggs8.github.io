@@ -1,0 +1,75 @@
+name: Capture URL to garden note
+
+on:
+  repository_dispatch:
+    types: [capture-url]
+  workflow_dispatch:
+    inputs:
+      url:
+        description: URL to capture
+        required: true
+      quick_thought:
+        description: Optional quick thought (goes into "My thoughts")
+        required: false
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: capture
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    # Issue events only count when the capture form's label is present
+    if: github.event_name != 'issues' || contains(github.event.issue.labels.*.name, 'capture')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Capture URL into a note
+        id: capture
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: python scripts/capture.py --from-event
+
+      - name: Commit and push note
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content tag-suggestions.md
+          git commit -m "capture: ${{ steps.capture.outputs.note_title }}"
+          for i in 1 2 3; do
+            git push && break
+            git pull --rebase && sleep 2
+          done
+
+      # Pushes made with GITHUB_TOKEN don't trigger the deploy workflow's
+      # push event, so dispatch it explicitly (workflow_dispatch is exempt).
+      - name: Trigger site deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref v5 -R ${{ github.repository }}
+
+      - name: Reply and close issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment ${{ github.event.issue.number }} -R ${{ github.repository }} \
+            --body "Captured ✅ → https://kyle-briggs8.github.io/notes/${{ steps.capture.outputs.note_slug }} (live after the deploy finishes, ~1 min)"
+          gh issue close ${{ github.event.issue.number }} -R ${{ github.repository }}

@@ -225,6 +225,87 @@ a.card:hover {
   color: var(--gray);
 }
 
+// full-width stacked cards (Recent writing)
+.card-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin: 0.8rem 0;
+
+  .card {
+    width: 100%;
+  }
+}
+
+// LinkedIn-style work timeline
+.xp {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+  margin: 1rem 0 1rem 0.3rem;
+  padding-left: 1.6rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--secondary), var(--tertiary));
+    opacity: 0.45;
+    border-radius: 1px;
+  }
+}
+
+.xp-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -1.6rem;
+    top: 0.28rem;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--light);
+    border: 2px solid var(--secondary);
+    box-shadow: 0 0 10px color-mix(in srgb, var(--secondary) 45%, transparent);
+  }
+}
+
+.xp-role {
+  font-family: var(--headerFont);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--dark);
+}
+
+.xp-org {
+  font-size: 0.88rem;
+  color: var(--darkgray);
+}
+
+.xp-dates {
+  font-family: var(--codeFont);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.xp-desc {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--gray);
+  margin-top: 0.15rem;
+}
+
 // homepage brain call-to-action banner
 .brain-cta {
   display: flex;

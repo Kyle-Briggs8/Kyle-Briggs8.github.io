@@ -16,16 +16,17 @@ This site is two things: a [[blog/index|blog]] of polished writing, and a [[note
 
 ## Work
 
-<div class="card-grid">
-<div class="card"><span class="card-kind">gov</span><span class="card-title">National Geospatial-Intelligence Agency</span><span class="card-sub">TODO: role + dates</span></div>
-<div class="card"><span class="card-kind">startup</span><span class="card-title">Spectric Labs</span><span class="card-sub">TODO: role + dates</span></div>
-<div class="card"><span class="card-kind">big tech</span><span class="card-title">Microsoft</span><span class="card-sub">Machine Learning Engineering — TODO: dates</span></div>
-<div class="card"><span class="card-kind">vc</span><span class="card-title">Galant Ventures</span><span class="card-sub">Venture Capital — TODO: role + dates</span></div>
+<!-- TODO: real roles, dates, and one-liners; newest first like LinkedIn -->
+<div class="xp">
+<div class="xp-item"><span class="xp-role">Machine Learning Engineering</span><span class="xp-org">Microsoft</span><span class="xp-dates">TODO: dates</span><span class="xp-desc">TODO: one-line description</span></div>
+<div class="xp-item"><span class="xp-role">Venture Capital</span><span class="xp-org">Galant Ventures</span><span class="xp-dates">TODO: dates</span><span class="xp-desc">TODO: one-line description</span></div>
+<div class="xp-item"><span class="xp-role">TODO: role</span><span class="xp-org">Spectric Labs</span><span class="xp-dates">TODO: dates</span><span class="xp-desc">TODO: one-line description</span></div>
+<div class="xp-item"><span class="xp-role">TODO: role</span><span class="xp-org">National Geospatial-Intelligence Agency</span><span class="xp-dates">TODO: dates</span><span class="xp-desc">TODO: one-line description</span></div>
 </div>
 
 ## Recent writing
 
-<div class="card-grid">
+<div class="card-stack">
 <a class="card" href="/blog/geowatch"><span class="card-kind">essay</span><span class="card-title">GeoWatch: open-source GEOINT from live news</span><span class="card-sub">Turning a location name into a mapped, severity-scored intel dashboard — on free tiers.</span></a>
 </div>
 

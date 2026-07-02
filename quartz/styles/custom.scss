@@ -121,6 +121,14 @@ article {
   color: var(--gray);
 }
 
+// ---------- explorer: hide chevrons on emptied folders (Blog / Garden) ------
+
+.explorer li:has(> .folder-outer > ul:empty) {
+  svg.folder-icon {
+    visibility: hidden;
+  }
+}
+
 // ---------- search & toolbar ------------------------------------------------
 
 .search {

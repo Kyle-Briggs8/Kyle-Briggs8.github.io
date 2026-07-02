@@ -161,9 +161,9 @@ plugins:
   - source: github:quartz-community/explorer
     enabled: true
     options:
-      # Hide the garden's contents from the sidebar: notes are navigated via
-      # the brain/graph/hub pages, not a folder listing. The Garden entry stays.
-      filterFn: "(node) => node.slugSegment !== 'tags' && !(node.slugSegments[0] === 'notes' && node.slugSegments.length > 1)"
+      # Blog and Garden appear as single entries: their contents are navigated
+      # via the brain/graph/hubs (garden) and the blog index, not the sidebar.
+      filterFn: "(node) => node.slugSegment !== 'tags' && !(['notes', 'blog'].includes(node.slugSegments[0]) && node.slugSegments.length > 1)"
     layout:
       position: left
       priority: 50

@@ -1,12 +1,185 @@
 @use "./variables.scss" as *;
 
-// ---------------------------------------------------------------------------
-// Garden note template polish (see CLAUDE.md "Note template")
-// ---------------------------------------------------------------------------
+// ===========================================================================
+// BrainSite skin — matches /static/brain/ (dark, glassy, neon accents).
+// Uses Quartz's CSS vars (--light/--lightgray/--gray/--darkgray/--dark/
+// --secondary/--tertiary) so light mode stays coherent; glow effects are
+// applied in dark mode only.
+// ===========================================================================
+
+// ---------- page canvas ----------------------------------------------------
+
+body {
+  background:
+    radial-gradient(1100px 500px at 85% -10%, color-mix(in srgb, var(--secondary) 9%, transparent), transparent 70%),
+    radial-gradient(900px 500px at -10% 30%, color-mix(in srgb, var(--tertiary) 7%, transparent), transparent 70%),
+    var(--light);
+  background-attachment: fixed;
+}
+
+// ---------- site title ------------------------------------------------------
+
+.page-title {
+  font-family: var(--headerFont);
+  letter-spacing: 0.01em;
+
+  a {
+    background: linear-gradient(90deg, var(--secondary), var(--tertiary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: filter 0.2s ease;
+
+    &:hover {
+      filter: brightness(1.2) drop-shadow(0 0 14px color-mix(in srgb, var(--secondary) 55%, transparent));
+    }
+  }
+}
+
+// ---------- headings & text -------------------------------------------------
+
+h1.article-title {
+  font-size: 2.1rem;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+article {
+  h2 {
+    letter-spacing: -0.01em;
+    border-bottom: 1px solid color-mix(in srgb, var(--lightgray) 70%, transparent);
+    padding-bottom: 0.25rem;
+  }
+
+  p, li {
+    line-height: 1.7;
+  }
+
+  a.internal {
+    background-color: color-mix(in srgb, var(--secondary) 10%, transparent);
+    border-radius: 5px;
+    padding: 0 0.2rem;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      background-color: color-mix(in srgb, var(--secondary) 22%, transparent);
+      box-shadow: 0 0 12px color-mix(in srgb, var(--secondary) 30%, transparent);
+    }
+  }
+
+  blockquote {
+    border-left: 3px solid var(--tertiary);
+    background: color-mix(in srgb, var(--lightgray) 30%, transparent);
+    border-radius: 0 8px 8px 0;
+    padding: 0.6rem 1rem;
+  }
+
+  pre {
+    border: 1px solid var(--lightgray);
+    border-radius: 10px;
+  }
+
+  hr {
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gray), transparent);
+  }
+}
+
+// ---------- sidebar cards (graph, TOC, backlinks, explorer) -----------------
+
+.sidebar.right > * {
+  background: color-mix(in srgb, var(--lightgray) 22%, transparent);
+  border: 1px solid color-mix(in srgb, var(--lightgray) 80%, transparent);
+  border-radius: 12px;
+  padding: 0.7rem 0.9rem;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.graph {
+  & > h3 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gray);
+  }
+
+  .graph-outer {
+    border: 1px solid color-mix(in srgb, var(--secondary) 35%, transparent);
+    border-radius: 10px;
+    box-shadow: inset 0 0 30px color-mix(in srgb, var(--secondary) 8%, transparent);
+  }
+}
+
+.backlinks > h3,
+.toc > button h3,
+.explorer button h2 {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gray);
+}
+
+// ---------- search & toolbar ------------------------------------------------
+
+.search {
+  .search-button {
+    border: 1px solid var(--lightgray);
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--lightgray) 25%, transparent);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover {
+      border-color: var(--secondary);
+      box-shadow: 0 0 14px color-mix(in srgb, var(--secondary) 25%, transparent);
+    }
+  }
+}
+
+// ---------- popovers ----------------------------------------------------------
+
+.popover > .popover-inner {
+  border: 1px solid color-mix(in srgb, var(--secondary) 35%, transparent);
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35), 0 0 20px color-mix(in srgb, var(--secondary) 12%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+// ---------- footer ------------------------------------------------------------
+
+footer {
+  opacity: 0.75;
+
+  ul li a:hover {
+    color: var(--tertiary);
+  }
+}
+
+// ---------- dark-mode-only neon accents ---------------------------------------
+
+:root[saved-theme="dark"] {
+  .page-title a:hover {
+    filter: brightness(1.3) drop-shadow(0 0 18px rgba(137, 180, 250, 0.6));
+  }
+
+  .sidebar.right > * {
+    background: rgba(30, 30, 46, 0.55);
+    border-color: rgba(69, 71, 90, 0.8);
+  }
+
+  article a.internal:hover {
+    box-shadow: 0 0 16px rgba(137, 180, 250, 0.35);
+  }
+}
+
+// ===========================================================================
+// Garden note template rules (CLAUDE.md "Note template") — do not remove.
+// ===========================================================================
 
 // Hide the "💭 My thoughts" header while the section is empty (next sibling is
-// the "Related" h2). Once the owner writes anything under it, a <p> lands
-// between the two headers and the section reappears automatically.
+// the "Related" h2). Reappears automatically once the owner writes something.
 article h2[id="-my-thoughts"]:has(+ h2) {
   display: none;
 }
@@ -48,24 +221,16 @@ article > .markdown-preview-view > p:first-child:has(> a:only-child) > a {
   border-radius: 8px;
   background-color: color-mix(in srgb, var(--lightgray) 35%, transparent);
   text-decoration: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {
     border-color: var(--secondary);
+    box-shadow: 0 0 14px color-mix(in srgb, var(--secondary) 25%, transparent);
   }
 }
-
-// ---------------------------------------------------------------------------
-// General polish
-// ---------------------------------------------------------------------------
 
 // Embedded players (YouTube etc.) get soft corners matching the theme.
 article iframe {
   border: 1px solid var(--lightgray);
-  border-radius: 8px;
-}
-
-// Slightly calmer page titles.
-h1.article-title {
-  letter-spacing: -0.015em;
+  border-radius: 10px;
 }

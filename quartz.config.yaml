@@ -17,9 +17,9 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Schibsted Grotesk
-      body: Source Sans Pro
-      code: IBM Plex Mono
+      header: Space Grotesk
+      body: Inter
+      code: JetBrains Mono
     colors:
       # Catppuccin Latte (light) / Mocha (dark) — keeps graph, search, and
       # popover CSS vars in step with the quartz-themes catppuccin skin.
@@ -290,13 +290,13 @@ plugins:
       position: beforeBody
       priority: 15
       display: all
+# quartz-themes skin disabled: the site look is hand-rolled in
+# quartz/styles/custom.scss to match /static/brain/ (owner preference).
   - source:
       name: quartz-themes
       repo: github:saberzero1/quartz-themes
       subdir: plugin
-    enabled: true
-    options:
-      theme: catppuccin
+    enabled: false
   - source: github:quartz-community/obsidian-plugin-excalidraw
     enabled: true
     options:

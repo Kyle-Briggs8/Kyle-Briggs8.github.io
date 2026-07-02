@@ -1,0 +1,33 @@
+---
+title: Kyle Briggs
+date: 2026-07-01
+---
+
+Hey — I'm Kyle. I'm a CS/Econ student interested in AI and agentic systems, geospatial intelligence, gov-tech, and the places where startups and government overlap.
+
+This site is two things: a [[blog/index|blog]] of polished writing, and (soon) a digital garden of notes on what I'm reading, watching, and listening to.
+
+<!-- TODO: headshot — drop an image into content/static/ and embed here -->
+
+📫 [kyl3.briggs@gmail.com](mailto:kyl3.briggs@gmail.com) · [GitHub](https://github.com/Kyle-Briggs8) · [LinkedIn](https://www.linkedin.com/in/kyle-briggs) <!-- TODO: confirm LinkedIn URL -->
+
+## Work
+
+- **National Geospatial-Intelligence Agency (NGA)** — <!-- TODO: role + dates + one-line description -->
+- **Spectric Labs** — <!-- TODO: role + dates + one-line description -->
+- **Microsoft** — Machine Learning Engineering <!-- TODO: role details + dates -->
+- **Galant Ventures** — Venture Capital <!-- TODO: role + dates + one-line description -->
+
+## Timeline
+
+<!-- TODO: fill in real dates and milestones; these are scaffolding -->
+
+- **Summer 2026** — Built [GeoWatch](blog/geowatch), an open-source GEOINT dashboard that turns live news into mapped, severity-scored event intelligence.
+- **2025–2026** — <!-- TODO: internships / school milestones -->
+- **2024** — <!-- TODO: started university? early projects -->
+
+## Writing
+
+Latest from the [[blog/index|blog]]:
+
+- [[blog/geowatch|GeoWatch: open-source GEOINT from live news]]

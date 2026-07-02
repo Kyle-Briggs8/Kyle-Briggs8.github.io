@@ -208,7 +208,7 @@ def _extract_json(raw: str) -> dict:
 
 
 def call_gemini(prompt: str) -> dict:
-    key = os.environ["GEMINI_API_KEY"]
+    key = os.environ["GEMINI_API_KEY"].strip().lstrip("\ufeff")  # BOM guard: PS pipes add one
     model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
     resp = requests.post(
         f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
@@ -224,7 +224,7 @@ def call_gemini(prompt: str) -> dict:
 
 
 def call_groq(prompt: str) -> dict:
-    key = os.environ["GROQ_API_KEY"]
+    key = os.environ["GROQ_API_KEY"].strip().lstrip("\ufeff")
     resp = requests.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers={"Authorization": f"Bearer {key}"},

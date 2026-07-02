@@ -31,6 +31,7 @@ Latest from the [[blog/index|blog]]:
 
 <!-- Updated automatically by scripts/capture.py; keep the markers. -->
 <!-- RECENT-NOTES:START -->
+- [[notes/brain2qwerty-non-invasive-brain-to-text|From Brain Waves to Words: Brain2Qwerty Offers a New Path to Communication Without Surgery]]
 - [[notes/do-things-that-dont-scale|Do Things that Don't Scale]]
 - [[notes/ai-agent-harness-loop-engineering|Learn AI Agent Harness & Loop Engineering in 19 Minutes]]
 <!-- RECENT-NOTES:END -->

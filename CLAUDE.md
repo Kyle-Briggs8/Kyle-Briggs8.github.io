@@ -12,11 +12,16 @@ startups/VC, personal finance.
 
 ## Current phase
 
-**Phase 2: the garden, manually.** Phase 1 is complete — the site is live at
-https://kyle-briggs8.github.io (repo: Kyle-Briggs8/Kyle-Briggs8.github.io, deploys
-on push to `v5`). The landing page has TODO markers awaiting the owner's real
-bio/timeline details. The capture pipeline does NOT exist yet. Do not build
-pipeline code unless explicitly asked. See PHASES.md for the full roadmap.
+**Phase 2: the garden, manually — content done, polish pending.** The site is live
+at https://kyle-briggs8.github.io (repo: Kyle-Briggs8/Kyle-Briggs8.github.io,
+deploys on push to `v5`). 17 hub pages + 12 seed notes exist; the seed notes were
+machine-drafted as placeholders — the owner should curate/swap them for media he
+actually consumed. The `publish: true` guardrail is enforced fail-closed via the
+explicit-publish plugin (see quartz.config.yaml) and verified against pages, graph,
+search, sitemap, and RSS; `content/notes/private-test-note.md` is the permanent
+canary. Deferred by owner: UI/graph styling, hiding empty "My thoughts" headers,
+landing-page TODOs. The capture pipeline does NOT exist yet. Do not build pipeline
+code unless explicitly asked. See PHASES.md for the full roadmap.
 
 ## Stack — decided, do not relitigate
 

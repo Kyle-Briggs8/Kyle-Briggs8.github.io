@@ -111,8 +111,10 @@ plugins:
     enabled: true
   - source: github:quartz-community/remove-draft
     enabled: true
+  # PRIVACY BOUNDARY (CLAUDE.md guardrail): fail-closed publish filter.
+  # A page is built ONLY if frontmatter has `publish: true`. Never disable.
   - source: github:quartz-community/explicit-publish
-    enabled: false
+    enabled: true
   - source: github:quartz-community/unlisted-pages
     enabled: true
     options: {}
@@ -225,8 +227,12 @@ plugins:
     options:
       links:
         GitHub: https://github.com/Kyle-Briggs8
-        LinkedIn: https://www.linkedin.com/in/kyle-briggs
+        LinkedIn: https://www.linkedin.com/in/kyle-briggs-/
         Email: mailto:kyl3.briggs@gmail.com
+# recent-notes stays disabled: it can't filter to notes/ from YAML (string filters
+# unsupported), and an unfiltered list would mix blog posts into the garden strip.
+# The homepage "recently in the garden" list is maintained by hand (Phase 3 pipeline
+# will update it automatically).
   - source: github:quartz-community/recent-notes
     enabled: false
   - source: github:quartz-community/spacer

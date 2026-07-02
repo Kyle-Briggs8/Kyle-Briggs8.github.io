@@ -2,6 +2,7 @@
 title: "GeoWatch: open-source GEOINT from live news"
 date: 2026-07-01
 description: How I built a tool that turns a location name into a mapped, severity-scored intelligence dashboard using free news APIs and an LLM.
+publish: true
 ---
 
 *[Live demo](https://geowatch-ej66.onrender.com) · [Source on GitHub](https://github.com/Kyle-Briggs8/Geowatch)*

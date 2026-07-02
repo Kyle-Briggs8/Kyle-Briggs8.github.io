@@ -1,15 +1,16 @@
 ---
 title: Kyle Briggs
 date: 2026-07-01
+publish: true
 ---
 
 Hey — I'm Kyle. I'm a CS/Econ student interested in AI and agentic systems, geospatial intelligence, gov-tech, and the places where startups and government overlap.
 
-This site is two things: a [[blog/index|blog]] of polished writing, and (soon) a digital garden of notes on what I'm reading, watching, and listening to.
+This site is two things: a [[blog/index|blog]] of polished writing, and a [[notes/index|digital garden]] of notes on what I'm reading, watching, and listening to.
 
 <!-- TODO: headshot — drop an image into content/static/ and embed here -->
 
-📫 [kyl3.briggs@gmail.com](mailto:kyl3.briggs@gmail.com) · [GitHub](https://github.com/Kyle-Briggs8) · [LinkedIn](https://www.linkedin.com/in/kyle-briggs) <!-- TODO: confirm LinkedIn URL -->
+📫 [kyl3.briggs@gmail.com](mailto:kyl3.briggs@gmail.com) · [GitHub](https://github.com/Kyle-Briggs8) · [LinkedIn](https://www.linkedin.com/in/kyle-briggs-/)
 
 ## Work
 
@@ -31,3 +32,15 @@ This site is two things: a [[blog/index|blog]] of polished writing, and (soon) a
 Latest from the [[blog/index|blog]]:
 
 - [[blog/geowatch|GeoWatch: open-source GEOINT from live news]]
+
+## Recently in the garden
+
+<!-- keep to ~5 most recent notes; newest first -->
+
+- [[notes/bellingcat-geolocation|Geolocation techniques (Bellingcat)]]
+- [[notes/karpathy-english-programming-tweet|The hottest new programming language is English]]
+- [[notes/dwarkesh-sholto-trenton|Sholto & Trenton on how LLMs work]]
+- [[notes/acquired-jensen-huang|Jensen Huang interview (Acquired)]]
+- [[notes/jl-collins-stock-series|The Stock Series (JL Collins)]]
+
+…or browse the whole [[notes/index|garden]].

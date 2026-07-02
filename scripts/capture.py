@@ -118,6 +118,19 @@ def fetch_video(url: str) -> FetchResult:
     else:
         errors.append("could not parse video id")
 
+    if not transcript:
+        # YouTube blocks transcript fetches from many datacenter IPs (e.g. GitHub
+        # runners) — fall back to the watch page's description so the LLM has
+        # more than a bare title to work with.
+        try:
+            page = requests.get(url, timeout=HTTP_TIMEOUT, headers=UA).text
+            m = re.search(r'"shortDescription":"((?:[^"\\]|\\.)*)"', page)
+            if m:
+                desc = m.group(1).encode().decode("unicode_escape", errors="ignore")
+                transcript = f"(video description, transcript unavailable)\n{desc}"
+        except Exception as e:  # noqa: BLE001
+            errors.append(f"description: {e}")
+
     ok = bool(title or transcript)
     return FetchResult(title, author, transcript, ok=ok, error="; ".join(errors))
 

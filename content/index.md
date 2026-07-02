@@ -37,11 +37,11 @@ Latest from the [[blog/index|blog]]:
 
 <!-- Updated automatically by scripts/capture.py; keep the markers. -->
 <!-- RECENT-NOTES:START -->
+- [[notes/do-things-that-dont-scale|Do Things that Don't Scale]]
 - [[notes/ai-agent-harness-loop-engineering|Learn AI Agent Harness & Loop Engineering in 19 Minutes]]
 - [[notes/intro-to-large-language-models|Introduction to Large Language Models by Andrej Karpathy]]
 - [[notes/bellingcat-geolocation|Geolocation techniques (Bellingcat)]]
 - [[notes/karpathy-english-programming-tweet|The hottest new programming language is English]]
-- [[notes/dwarkesh-sholto-trenton|Sholto & Trenton on how LLMs work]]
 <!-- RECENT-NOTES:END -->
 
 

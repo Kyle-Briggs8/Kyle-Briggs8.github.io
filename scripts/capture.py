@@ -212,7 +212,7 @@ def call_gemini(prompt: str) -> dict:
     model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
     resp = requests.post(
         f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
-        params={"key": key},
+        headers={"x-goog-api-key": key},  # newer AI-Studio keys reject ?key= query auth
         json={
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": 0.2, "responseMimeType": "application/json"},

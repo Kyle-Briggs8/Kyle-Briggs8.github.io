@@ -12,16 +12,24 @@ startups/VC, personal finance.
 
 ## Current phase
 
-**Phase 2: the garden, manually — content done, polish pending.** The site is live
-at https://kyle-briggs8.github.io (repo: Kyle-Briggs8/Kyle-Briggs8.github.io,
-deploys on push to `v5`). 17 hub pages + 12 seed notes exist; the seed notes were
-machine-drafted as placeholders — the owner should curate/swap them for media he
-actually consumed. The `publish: true` guardrail is enforced fail-closed via the
-explicit-publish plugin (see quartz.config.yaml) and verified against pages, graph,
-search, sitemap, and RSS; `content/notes/private-test-note.md` is the permanent
-canary. Deferred by owner: UI/graph styling, hiding empty "My thoughts" headers,
-landing-page TODOs. The capture pipeline does NOT exist yet. Do not build pipeline
-code unless explicitly asked. See PHASES.md for the full roadmap.
+**Phase 3: capture pipeline — built, awaiting LLM key + device clients.** The site
+is live at https://kyle-briggs8.github.io (repo: Kyle-Briggs8/Kyle-Briggs8.github.io,
+deploys on push to `v5`; pushes from Actions dispatch deploy.yml explicitly since
+GITHUB_TOKEN pushes don't trigger it). The pipeline (`scripts/capture.py` +
+`.github/workflows/capture.yml`, clients documented in CAPTURE.md) is tested
+end-to-end via workflow_dispatch and the issue form. Outstanding: owner must set
+the `GEMINI_API_KEY` secret (until then notes arrive `needs-attention` with no
+summary), build the iOS Shortcut, and install the bookmarklet per CAPTURE.md.
+
+Still true from Phase 2: the 12 seed notes are machine-drafted placeholders the
+owner plans to WIPE and replace with media he actually consumed (fix the homepage
+recent-strip and Related links when that happens; keep the 17 hubs and
+`private-test-note.md`, the publish-guardrail canary). The `publish: true`
+guardrail is fail-closed via the explicit-publish plugin — verified against pages,
+graph, search, sitemap, RSS. Deferred by owner: UI/graph styling, hiding empty
+"My thoughts" headers, landing-page TODOs. NOTE: the repo is public, so
+`publish: false` hides notes from the site but NOT from the repo source — never
+sync truly private notes here.
 
 ## Stack — decided, do not relitigate
 

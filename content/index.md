@@ -37,11 +37,11 @@ Latest from the [[blog/index|blog]]:
 
 <!-- Updated automatically by scripts/capture.py; keep the markers. -->
 <!-- RECENT-NOTES:START -->
-- [[notes/building-effective-ai-agents|Building Effective AI Agents]]
-- [[notes/1hr-talk-intro-to-large-language-models|[1hr Talk] Intro to Large Language Models]]
 - [[notes/bellingcat-geolocation|Geolocation techniques (Bellingcat)]]
 - [[notes/karpathy-english-programming-tweet|The hottest new programming language is English]]
 - [[notes/dwarkesh-sholto-trenton|Sholto & Trenton on how LLMs work]]
+- [[notes/acquired-jensen-huang|Jensen Huang interview (Acquired)]]
+- [[notes/jl-collins-stock-series|The Stock Series (JL Collins)]]
 <!-- RECENT-NOTES:END -->
 
 

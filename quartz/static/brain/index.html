@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🧠 The Brain — Kyle Briggs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;700&family=IBM+Plex+Mono:wght@400;600&display=swap" />
+<style>
+  :root {
+    --base: #11111b;        /* mocha crust */
+    --surface: #1e1e2e;     /* mocha base */
+    --overlay: #313244;
+    --text: #cdd6f4;
+    --subtext: #a6adc8;
+    --muted: #6c7086;
+    --blue: #89b4fa;
+    --mauve: #cba6f7;
+    --teal: #94e2d5;
+    --peach: #fab387;
+    --green: #a6e3a1;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: var(--base); }
+  body { font-family: "Schibsted Grotesk", system-ui, sans-serif; color: var(--text); }
+  #graph { position: fixed; inset: 0; }
+
+  /* subtle vignette + scanline sheen for the sci-fi feel */
+  #fx {
+    position: fixed; inset: 0; pointer-events: none; z-index: 2;
+    background:
+      radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.012) 0 1px, transparent 1px 3px);
+  }
+
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 5;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0.9rem 1.2rem; pointer-events: none;
+  }
+  header > * { pointer-events: auto; }
+  .brand { display: flex; align-items: baseline; gap: 0.7rem; }
+  .brand h1 {
+    font-size: 1.05rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--mauve);
+    text-shadow: 0 0 18px rgba(203, 166, 247, 0.55);
+  }
+  .brand a {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.72rem;
+    color: var(--muted); text-decoration: none; border: 1px solid var(--overlay);
+    border-radius: 999px; padding: 0.2rem 0.7rem; transition: all 0.2s ease;
+  }
+  .brand a:hover { color: var(--teal); border-color: var(--teal); box-shadow: 0 0 12px rgba(148, 226, 213, 0.35); }
+  .hint {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.68rem; color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .hint b { color: var(--subtext); font-weight: 600; }
+
+  .legend {
+    position: fixed; bottom: 1rem; left: 1.2rem; z-index: 5;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; color: var(--muted);
+    display: flex; gap: 1rem;
+  }
+  .legend span::before { content: "●"; margin-right: 0.35rem; }
+  .legend .l-hub::before { color: var(--mauve); }
+  .legend .l-note::before { color: var(--blue); }
+  .legend .l-blog::before { color: var(--peach); }
+  .legend .l-page::before { color: var(--teal); }
+
+  /* preview panel */
+  #panel {
+    position: fixed; top: 0; right: 0; bottom: 0; width: min(430px, 92vw); z-index: 6;
+    background: linear-gradient(160deg, rgba(30, 30, 46, 0.92), rgba(17, 17, 27, 0.94));
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-left: 1px solid rgba(203, 166, 247, 0.35);
+    box-shadow: -30px 0 60px rgba(0, 0, 0, 0.5), inset 1px 0 0 rgba(203,166,247,0.15);
+    padding: 4.4rem 1.6rem 1.6rem; display: flex; flex-direction: column; gap: 0.9rem;
+    transform: translateX(105%); transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  #panel.open { transform: translateX(0); }
+  #panel .kind {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.65rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--teal);
+  }
+  #panel h2 { font-size: 1.35rem; line-height: 1.25; color: var(--text); }
+  #panel .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  #panel .tags span {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.64rem; color: var(--mauve);
+    border: 1px solid rgba(203, 166, 247, 0.4); border-radius: 999px; padding: 0.14rem 0.55rem;
+  }
+  #panel .excerpt {
+    font-size: 0.86rem; line-height: 1.65; color: var(--subtext);
+    overflow-y: auto; flex: 1; padding-right: 0.4rem;
+  }
+  #panel .excerpt::-webkit-scrollbar { width: 4px; }
+  #panel .excerpt::-webkit-scrollbar-thumb { background: var(--overlay); border-radius: 2px; }
+  #panel .meta { font-family: "IBM Plex Mono", monospace; font-size: 0.66rem; color: var(--muted); }
+  #dive {
+    display: block; text-align: center; text-decoration: none;
+    font-family: "IBM Plex Mono", monospace; font-size: 0.8rem; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--base);
+    background: linear-gradient(90deg, var(--mauve), var(--blue));
+    border-radius: 10px; padding: 0.75rem 1rem;
+    box-shadow: 0 0 22px rgba(137, 180, 250, 0.4); transition: box-shadow 0.2s ease, transform 0.15s ease;
+  }
+  #dive:hover { box-shadow: 0 0 34px rgba(203, 166, 247, 0.65); transform: translateY(-1px); }
+  #close {
+    position: absolute; top: 1rem; right: 1.1rem; background: none; border: 1px solid var(--overlay);
+    color: var(--muted); border-radius: 999px; width: 2rem; height: 2rem; cursor: pointer;
+    font-size: 0.9rem; transition: all 0.2s ease;
+  }
+  #close:hover { color: var(--text); border-color: var(--muted); }
+
+  @media (max-width: 640px) {
+    #panel { top: auto; left: 0; right: 0; width: 100%; height: 62vh; padding-top: 2.6rem;
+      border-left: none; border-top: 1px solid rgba(203, 166, 247, 0.35);
+      transform: translateY(105%); }
+    #panel.open { transform: translateY(0); }
+    .legend { display: none; }
+    .hint { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="graph"></div>
+<div id="fx"></div>
+
+<header>
+  <div class="brand">
+    <h1>The Brain</h1>
+    <a href="/">← back to site</a>
+  </div>
+  <div class="hint"><b>drag</b> to orbit · <b>scroll</b> to zoom · <b>click</b> a node to preview · <b>double-click</b> to dive in</div>
+</header>
+
+<div class="legend">
+  <span class="l-hub">hub</span>
+  <span class="l-note">note</span>
+  <span class="l-blog">blog</span>
+  <span class="l-page">page</span>
+</div>
+
+<aside id="panel" aria-live="polite">
+  <button id="close" aria-label="Close preview">✕</button>
+  <div class="kind" id="p-kind"></div>
+  <h2 id="p-title"></h2>
+  <div class="tags" id="p-tags"></div>
+  <div class="excerpt" id="p-excerpt"></div>
+  <div class="meta" id="p-meta"></div>
+  <a id="dive" href="#">Dive in →</a>
+</aside>
+
+<script src="https://unpkg.com/force-graph@1.49.5/dist/force-graph.min.js"></script>
+<script>
+(async () => {
+  const res = await fetch("/static/contentIndex.json");
+  const index = await res.json();
+
+  const SKIP = (slug) =>
+    slug === "index" || slug === "404" || slug.startsWith("tags/") || slug === "brain";
+
+  // every tag that exists anywhere → notes/<tag> pages are the hubs
+  const allTags = new Set();
+  for (const e of Object.values(index)) (e.tags || []).forEach((t) => allTags.add(t));
+
+  const kindOf = (slug) => {
+    if (slug.startsWith("notes/") && allTags.has(slug.slice(6))) return "hub";
+    if (slug.startsWith("notes/")) return "note";
+    if (slug.startsWith("blog/")) return "blog";
+    return "page";
+  };
+  const COLORS = { hub: "#cba6f7", note: "#89b4fa", blog: "#fab387", page: "#94e2d5" };
+
+  const nodes = [];
+  const byId = new Map();
+  for (const [slug, e] of Object.entries(index)) {
+    if (SKIP(slug)) continue;
+    const n = { id: slug, title: e.title || slug, tags: e.tags || [],
+                content: e.content || "", kind: kindOf(slug), degree: 0 };
+    nodes.push(n); byId.set(slug, n);
+  }
+  const links = [];
+  for (const [slug, e] of Object.entries(index)) {
+    if (!byId.has(slug)) continue;
+    for (const target of e.links || []) {
+      if (byId.has(target) && target !== slug) {
+        links.push({ source: slug, target });
+        byId.get(slug).degree++; byId.get(target).degree++;
+      }
+    }
+  }
+
+  const radius = (n) => (n.kind === "hub" ? 6 : 3.5) + Math.sqrt(n.degree) * 1.6;
+
+  // hover neighborhood highlighting
+  let hoverNode = null;
+  const neighbors = new Map(nodes.map((n) => [n.id, new Set([n.id])]));
+  links.forEach((l) => { neighbors.get(l.source).add(l.target); neighbors.get(l.target).add(l.source); });
+
+  const panel = document.getElementById("panel");
+  const show = (n) => {
+    document.getElementById("p-kind").textContent = n.kind;
+    document.getElementById("p-title").textContent = n.title;
+    document.getElementById("p-tags").innerHTML =
+      n.tags.map((t) => `<span>#${t}</span>`).join("");
+    const text = n.content.trim();
+    document.getElementById("p-excerpt").textContent =
+      text ? text.slice(0, 900) + (text.length > 900 ? " …" : "") : "(no preview — dive in)";
+    document.getElementById("p-meta").textContent =
+      `${n.degree} connection${n.degree === 1 ? "" : "s"} · /${n.id}`;
+    document.getElementById("dive").href = "/" + n.id;
+    panel.classList.add("open");
+  };
+  document.getElementById("close").onclick = () => panel.classList.remove("open");
+  addEventListener("keydown", (e) => { if (e.key === "Escape") panel.classList.remove("open"); });
+
+  const g = ForceGraph()(document.getElementById("graph"))
+    .graphData({ nodes, links })
+    .backgroundColor("rgba(0,0,0,0)")
+    .nodeRelSize(1)
+    .nodeVal((n) => radius(n) ** 2 / 4)
+    .nodeLabel(() => "")
+    .linkColor(() => "rgba(166, 173, 200, 0.13)")
+    .linkWidth(0.6)
+    .linkDirectionalParticles(2)
+    .linkDirectionalParticleWidth(1.6)
+    .linkDirectionalParticleSpeed(0.004)
+    .linkDirectionalParticleColor(() => "rgba(148, 226, 213, 0.8)")
+    .onNodeHover((n) => { hoverNode = n || null; document.body.style.cursor = n ? "pointer" : "default"; });
+
+  // click = preview; a second click on the same node within 350ms = dive in
+  let lastClick = { id: null, t: 0 };
+  g.onNodeClick((n) => {
+    const now = Date.now();
+    if (lastClick.id === n.id && now - lastClick.t < 350) { location.href = "/" + n.id; return; }
+    lastClick = { id: n.id, t: now };
+    show(n);
+  });
+  g.onBackgroundClick(() => panel.classList.remove("open"));
+
+  g.nodeCanvasObject((n, ctx, scale) => {
+    const r = radius(n);
+    const dimmed = hoverNode && !neighbors.get(hoverNode.id).has(n.id);
+    const color = COLORS[n.kind];
+
+    ctx.save();
+    ctx.globalAlpha = dimmed ? 0.12 : 1;
+
+    // neon glow
+    ctx.shadowColor = color;
+    ctx.shadowBlur = n.kind === "hub" ? 24 : 12;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, r, 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    // core
+    ctx.shadowBlur = 0;
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, Math.max(r - 1.6, 0.8), 0, 2 * Math.PI);
+    ctx.fillStyle = "#1e1e2e";
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(n.x, n.y, Math.max(r - 2.6, 0.5), 0, 2 * Math.PI);
+    ctx.fillStyle = color;
+    ctx.fill();
+
+    // labels: hubs always (when zoomed enough), others on hover
+    const showLabel = (n.kind === "hub" && scale > 0.9) || hoverNode === n;
+    if (showLabel && !dimmed) {
+      const label = n.title.length > 34 ? n.title.slice(0, 33) + "…" : n.title;
+      ctx.font = `${n.kind === "hub" ? 600 : 400} ${Math.max(11 / scale, 2.4)}px "IBM Plex Mono", monospace`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillStyle = "rgba(17, 17, 27, 0.75)";
+      const w = ctx.measureText(label).width;
+      const fh = Math.max(11 / scale, 2.4);
+      ctx.fillRect(n.x - w / 2 - 3 / scale, n.y + r + 2 / scale, w + 6 / scale, fh + 4 / scale);
+      ctx.fillStyle = n.kind === "hub" ? "#cba6f7" : "#cdd6f4";
+      ctx.fillText(label, n.x, n.y + r + 4 / scale);
+    }
+    ctx.restore();
+  });
+
+  g.d3Force("charge").strength(-160);
+  g.d3Force("link").distance((l) =>
+    byId.get(typeof l.source === "object" ? l.source.id : l.source)?.kind === "hub" ||
+    byId.get(typeof l.target === "object" ? l.target.id : l.target)?.kind === "hub" ? 70 : 45);
+
+  setTimeout(() => g.zoomToFit(600, 60), 700);
+})();
+</script>
+</body>
+</html>

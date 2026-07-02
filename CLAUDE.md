@@ -12,7 +12,10 @@ startups/VC, personal finance.
 
 ## Current phase
 
-**Phase 1: site skeleton.** The capture pipeline does NOT exist yet. Do not build
+**Phase 2: the garden, manually.** Phase 1 is complete — the site is live at
+https://kyle-briggs8.github.io (repo: Kyle-Briggs8/Kyle-Briggs8.github.io, deploys
+on push to `v5`). The landing page has TODO markers awaiting the owner's real
+bio/timeline details. The capture pipeline does NOT exist yet. Do not build
 pipeline code unless explicitly asked. See PHASES.md for the full roadmap.
 
 ## Stack — decided, do not relitigate

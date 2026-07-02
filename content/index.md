@@ -37,11 +37,11 @@ Latest from the [[blog/index|blog]]:
 
 <!-- Updated automatically by scripts/capture.py; keep the markers. -->
 <!-- RECENT-NOTES:START -->
+- [[notes/intro-to-large-language-models|Introduction to Large Language Models by Andrej Karpathy]]
 - [[notes/bellingcat-geolocation|Geolocation techniques (Bellingcat)]]
 - [[notes/karpathy-english-programming-tweet|The hottest new programming language is English]]
 - [[notes/dwarkesh-sholto-trenton|Sholto & Trenton on how LLMs work]]
 - [[notes/acquired-jensen-huang|Jensen Huang interview (Acquired)]]
-- [[notes/jl-collins-stock-series|The Stock Series (JL Collins)]]
 <!-- RECENT-NOTES:END -->
 
 

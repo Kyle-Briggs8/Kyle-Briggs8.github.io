@@ -174,6 +174,90 @@ footer {
   }
 }
 
+// ---------- cards (homepage sections + pipeline-maintained garden strip) ----
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 0.8rem;
+  margin: 0.8rem 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--lightgray) 85%, transparent);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--lightgray) 22%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+a.card:hover {
+  border-color: var(--secondary);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--secondary) 25%, transparent);
+  transform: translateY(-2px);
+}
+
+.card-kind {
+  font-family: var(--codeFont);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--tertiary);
+}
+
+.card-title {
+  font-family: var(--headerFont);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  color: var(--dark);
+}
+
+.card-sub {
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--gray);
+}
+
+// homepage brain call-to-action banner
+.brain-cta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 1.1rem 0;
+  padding: 0.9rem 1.2rem;
+  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--secondary) 45%, transparent);
+  background: linear-gradient(120deg,
+    color-mix(in srgb, var(--secondary) 14%, transparent),
+    color-mix(in srgb, var(--tertiary) 10%, transparent));
+  font-family: var(--headerFont);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--dark);
+  text-decoration: none;
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+  span {
+    font-family: var(--codeFont);
+    font-weight: 400;
+    font-size: 0.72rem;
+    color: var(--gray);
+    letter-spacing: 0.03em;
+  }
+
+  &:hover {
+    border-color: var(--secondary);
+    box-shadow: 0 0 26px color-mix(in srgb, var(--secondary) 35%, transparent);
+  }
+}
+
 // ===========================================================================
 // Garden note template rules (CLAUDE.md "Note template") — do not remove.
 // ===========================================================================

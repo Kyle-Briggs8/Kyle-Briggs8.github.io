@@ -52,7 +52,6 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add content
-          git add tag-suggestions.md || true
           git commit -m "capture: ${{ steps.capture.outputs.note_title }}"
           for i in 1 2 3; do
             git push && break

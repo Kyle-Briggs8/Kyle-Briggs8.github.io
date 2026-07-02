@@ -69,7 +69,8 @@ blocks bookmarklet fetches; if a site refuses, fall back to the issue form.
   Or: `gh workflow run capture.yml -f url=https://…`
 - Notes from failed fetches/summaries carry `needs-attention: true` in
   frontmatter — search the repo for that string periodically.
-- Tag suggestions accumulate in `tag-suggestions.md` (repo root).
+- Tags are organic: the LLM proposes them, a second pass canonicalizes against
+  existing tags, and hub pages auto-create on first use.
 
 ## Secrets the workflow needs
 

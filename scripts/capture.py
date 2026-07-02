@@ -4,15 +4,16 @@
 Usage (local):
     python scripts/capture.py --url https://... [--thought "..."]
 
-In GitHub Actions the script can instead resolve its inputs from the event
-payload (repository_dispatch, workflow_dispatch handled by the workflow,
-issues parsed from the issue body):
+In GitHub Actions the script resolves its inputs from the event payload:
     python scripts/capture.py --from-event
 
 Design rules (from CLAUDE.md):
-- Tags come ONLY from the 17-tag controlled vocabulary; never invented.
-- If nothing fits, tag the closest match AND append a suggestion to
-  tag-suggestions.md for human review. No `misc` tag.
+- Tags are ORGANIC: the LLM proposes 1-3 kebab-case categories from the
+  content itself. A second canonicalization pass checks every proposed tag
+  against all tags already used in the garden and maps near-duplicates onto
+  the existing tag (reason: "agents" vs "ai-agents" vs "agentic-systems"
+  fragments the graph into mush).
+- A hub page is auto-created in content/notes/ the first time a tag is used.
 - Any fetch/LLM failure still creates the note, with `needs-attention: true`
   in frontmatter. Never fail silently.
 - Tweets always store text + author in the body; embeds are enhancement only.
@@ -35,15 +36,6 @@ import requests
 REPO_ROOT = Path(__file__).resolve().parent.parent
 NOTES_DIR = REPO_ROOT / "content" / "notes"
 INDEX_MD = REPO_ROOT / "content" / "index.md"
-TAG_SUGGESTIONS = REPO_ROOT / "tag-suggestions.md"
-
-VOCABULARY = [
-    "agentic-systems", "llm-evals", "rag-and-retrieval", "ai-security",
-    "ml-infrastructure", "geoint", "cybersecurity",
-    "gov-tech", "startups", "venture-capital", "big-tech",
-    "personal-finance", "markets-and-investing",
-    "career-strategy", "fitness", "math-and-puzzles", "ideas-worth-stealing",
-]
 
 PODCAST_DOMAINS = (
     "open.spotify.com", "podcasts.apple.com", "overcast.fm", "pca.st",
@@ -181,35 +173,7 @@ def fetch_article(url: str) -> FetchResult:
 FETCHERS = {"video": fetch_video, "tweet": fetch_tweet, "article": fetch_article, "podcast": fetch_article}
 
 
-# ----------------------------------------------------------------------- LLM
-
-PROMPT_TEMPLATE = """You are the summarizer for a personal "digital garden" of saved media.
-Given the content below, return STRICT JSON only — no preamble, no markdown fences.
-
-{{
-  "title": "descriptive human-readable note title",
-  "slug": "kebab-case-filename-slug (short, descriptive, no dates)",
-  "author": "creator of the source content, or null",
-  "tldr": "1-2 sentence TL;DR",
-  "summary_md": "short paragraph OR up to 5 markdown bullets",
-  "tags": ["1 to 3 tags, ONLY from the allowed list below"],
-  "suggested_tag": "kebab-case suggestion if the allowed list fits poorly, else null"
-}}
-
-RULES:
-- tags MUST come from this exact list (pick the closest matches, 1-3 of them,
-  never invent new ones, never zero): {vocab}
-- If nothing fits well, still pick the single closest tag AND set suggested_tag.
-
-MEDIA TYPE: {media}
-SOURCE URL: {url}
-KNOWN TITLE: {title}
-KNOWN AUTHOR: {author}
-
-CONTENT:
-{content}
-"""
-
+# ----------------------------------------------------------------- LLM calls
 
 def _extract_json(raw: str) -> dict:
     raw = raw.strip()
@@ -221,7 +185,7 @@ def _extract_json(raw: str) -> dict:
 
 
 def call_gemini(prompt: str) -> dict:
-    key = os.environ["GEMINI_API_KEY"].strip().lstrip("\ufeff")  # BOM guard: PS pipes add one
+    key = os.environ["GEMINI_API_KEY"].strip().lstrip("﻿")
     model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
     resp = requests.post(
         f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
@@ -237,7 +201,7 @@ def call_gemini(prompt: str) -> dict:
 
 
 def call_groq(prompt: str) -> dict:
-    key = os.environ["GROQ_API_KEY"].strip().lstrip("\ufeff")
+    key = os.environ["GROQ_API_KEY"].strip().lstrip("﻿")
     resp = requests.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers={"Authorization": f"Bearer {key}"},
@@ -252,13 +216,8 @@ def call_groq(prompt: str) -> dict:
     return _extract_json(resp.json()["choices"][0]["message"]["content"])
 
 
-def run_llm(media: str, url: str, fetched: FetchResult) -> tuple[dict | None, str]:
-    """Gemini first, Groq fallback. Returns (result, error_string)."""
-    prompt = PROMPT_TEMPLATE.format(
-        vocab=", ".join(VOCABULARY), media=media, url=url,
-        title=fetched.title or "(unknown)", author=fetched.author or "(unknown)",
-        content=(fetched.text or "(fetch failed — summarize from title/URL only)")[:MAX_CONTENT_CHARS],
-    )
+def llm_json(prompt: str) -> tuple[dict | None, str]:
+    """Gemini first, Groq fallback. Returns (parsed_json, error_string)."""
     errors = []
     for name, fn, env in (("gemini", call_gemini, "GEMINI_API_KEY"), ("groq", call_groq, "GROQ_API_KEY")):
         if not os.environ.get(env):
@@ -269,6 +228,134 @@ def run_llm(media: str, url: str, fetched: FetchResult) -> tuple[dict | None, st
         except Exception as e:  # noqa: BLE001
             errors.append(f"{name}: {e}")
     return None, "; ".join(errors)
+
+
+# ------------------------------------------------------- pass 1: summarize
+
+SUMMARIZE_PROMPT = """You are the summarizer for a personal "digital garden" of saved media.
+Given the content below, return STRICT JSON only — no preamble, no markdown fences.
+
+{{
+  "title": "descriptive human-readable note title",
+  "slug": "kebab-case-filename-slug (short, descriptive, no dates)",
+  "author": "creator of the source content, or null",
+  "tldr": "1-2 sentence TL;DR",
+  "summary_md": "short paragraph OR up to 5 markdown bullets",
+  "tags": ["1 to 3 kebab-case topical categories that best describe this content"]
+}}
+
+TAG RULES:
+- Tags are categories for a knowledge graph: broad enough to recur across many
+  saved items (e.g. "agentic-systems", "geoint", "personal-finance"), never
+  one-off descriptors (bad: "this-specific-paper", "cool-video").
+- kebab-case, 1-3 of them, never zero.
+
+MEDIA TYPE: {media}
+SOURCE URL: {url}
+KNOWN TITLE: {title}
+KNOWN AUTHOR: {author}
+
+CONTENT:
+{content}
+"""
+
+
+def run_summarize(media: str, url: str, fetched: FetchResult) -> tuple[dict | None, str]:
+    prompt = SUMMARIZE_PROMPT.format(
+        media=media, url=url,
+        title=fetched.title or "(unknown)", author=fetched.author or "(unknown)",
+        content=(fetched.text or "(fetch failed — summarize from title/URL only)")[:MAX_CONTENT_CHARS],
+    )
+    return llm_json(prompt)
+
+
+# --------------------------------------------- pass 2: tag canonicalization
+
+CANONICALIZE_PROMPT = """You maintain the category system of a personal knowledge graph.
+New content proposed these tags: {proposed}
+
+Tags ALREADY IN USE in the graph: {existing}
+
+For each proposed tag decide: does it name the same or a near-identical concept
+as an EXISTING tag (synonym, singular/plural, broader/narrower phrasing of the
+same cluster)? If yes, replace it with that existing tag. If it is a genuinely
+distinct concept, keep it (normalized to clean kebab-case).
+
+Return STRICT JSON only:
+{{
+  "tags": ["final 1-3 tags, deduplicated"],
+  "new": {{"each-genuinely-new-tag": "one-sentence description of what this category covers"}}
+}}
+
+Examples of what MUST be merged: "ai-agents" or "llm-agents" -> "agentic-systems";
+"investing" -> "markets-and-investing"; "startup" -> "startups".
+"""
+
+
+def slug_tag(tag: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", tag.lower()).strip("-")
+
+
+def existing_tags() -> set[str]:
+    """Every tag currently used by any note in the garden."""
+    tags: set[str] = set()
+    for f in NOTES_DIR.glob("*.md"):
+        m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read_text(encoding="utf-8"), re.M)
+        if m:
+            tags.update(t.strip() for t in m.group(1).split(",") if t.strip())
+    return tags
+
+
+def canonicalize(proposed: list[str], known: set[str]) -> tuple[list[str], dict[str, str], str]:
+    """Returns (final_tags, {new_tag: description}, error). Never raises."""
+    proposed = [slug_tag(t) for t in proposed if slug_tag(t)][:3]
+    if not proposed:
+        return [], {}, "no tags proposed"
+
+    # cheap algorithmic folds first: exact + plural/singular matches
+    folded = []
+    for t in proposed:
+        if t in known:
+            folded.append(t)
+        elif t.rstrip("s") in known:
+            folded.append(t.rstrip("s"))
+        elif (t + "s") in known:
+            folded.append(t + "s")
+        else:
+            folded.append(t)
+    proposed = list(dict.fromkeys(folded))
+
+    novel = [t for t in proposed if t not in known]
+    if not novel:  # everything already canonical
+        return proposed, {}, ""
+
+    result, err = llm_json(CANONICALIZE_PROMPT.format(
+        proposed=json.dumps(proposed), existing=json.dumps(sorted(known))))
+    if result is None:
+        # LLM check unavailable: keep known tags, accept novel ones as-is
+        return proposed, {t: "" for t in novel}, f"canonicalization skipped: {err}"
+
+    final = list(dict.fromkeys(slug_tag(t) for t in result.get("tags", []) if slug_tag(t)))[:3]
+    if not final:
+        final = proposed
+    new = {slug_tag(k): (v or "") for k, v in (result.get("new") or {}).items()
+           if slug_tag(k) in final and slug_tag(k) not in known}
+    return final, new, ""
+
+
+def ensure_hub(tag: str, description: str) -> Path | None:
+    """Create content/notes/<tag>.md if this tag has no hub page yet."""
+    path = NOTES_DIR / f"{tag}.md"
+    if path.exists():
+        return None
+    title = tag.replace("-", " ").title()
+    desc = description.strip() or f"Notes tagged `#{tag}`."
+    path.write_text(
+        f"---\ntitle: {title}\ntags: [{tag}]\npublish: true\n---\n\n"
+        f"*Hub page for `#{tag}` — auto-created by the capture pipeline.*\n\n{desc}\n",
+        encoding="utf-8", newline="\n",
+    )
+    return path
 
 
 # ------------------------------------------------------------- note assembly
@@ -303,20 +390,13 @@ def build_embed(media: str, url: str, title: str, fetched: FetchResult) -> str:
     return f"{icon} [{label}]({url})"
 
 
-def build_note(url, media, thought, fetched, llm, llm_error) -> tuple[Path, str, list[str], str | None]:
+def build_note(url, media, thought, fetched, llm, llm_error, tags) -> tuple[Path, str]:
     today = datetime.date.today().isoformat()
-    needs_attention = (not fetched.ok) or (llm is None)
+    needs_attention = (not fetched.ok) or (llm is None) or (not tags)
 
     title = (llm or {}).get("title") or fetched.title or url
     author = (llm or {}).get("author") or fetched.author or ""
     slug = slugify((llm or {}).get("slug") or title)
-
-    tags = [t for t in (llm or {}).get("tags", []) if t in VOCABULARY][:3]
-    suggested = (llm or {}).get("suggested_tag") or None
-    if suggested in VOCABULARY:
-        suggested = None
-    if not tags:  # rule 4: never force a bogus tag; flag instead
-        needs_attention = True
 
     tldr = (llm or {}).get("tldr") or "_(summary pending — automatic capture could not summarize this source)_"
     summary = (llm or {}).get("summary_md") or f"_(no summary generated: {llm_error or fetched.error or 'unknown'})_"
@@ -339,37 +419,33 @@ def build_note(url, media, thought, fetched, llm, llm_error) -> tuple[Path, str,
 
     path = unique_note_path(slug)
     path.write_text("\n".join(fm) + "\n\n" + "\n".join(body), encoding="utf-8", newline="\n")
-    return path, title, tags, suggested
+    return path, title
 
 
 RECENT_START = "<!-- RECENT-NOTES:START -->"
 RECENT_END = "<!-- RECENT-NOTES:END -->"
+MAX_RECENT = 6
 
 
-def update_recent_strip(slug: str, title: str) -> bool:
-    """Prepend the new note to the homepage strip (between markers), keep 5."""
+def update_recent_strip(slug: str, title: str, media: str) -> bool:
+    """Prepend a card for the new note to the homepage strip (between markers)."""
     if not INDEX_MD.exists():
         return False
     text = INDEX_MD.read_text(encoding="utf-8")
     if RECENT_START not in text or RECENT_END not in text:
         return False
+    safe_title = title.replace("<", "&lt;").replace(">", "&gt;")
+    card = (f'<a class="card" href="/notes/{slug}">'
+            f'<span class="card-kind">{media}</span>'
+            f'<span class="card-title">{safe_title}</span></a>')
     before, rest = text.split(RECENT_START, 1)
     inside, after = rest.split(RECENT_END, 1)
-    items = [ln for ln in inside.splitlines() if ln.strip().startswith("- ")]
-    items.insert(0, f"- [[notes/{slug}|{title}]]")
-    new_inside = "\n" + "\n".join(items[:5]) + "\n"
+    items = [ln for ln in inside.splitlines() if ln.strip().startswith('<a class="card"')]
+    items.insert(0, card)
+    new_inside = "\n" + "\n".join(items[:MAX_RECENT]) + "\n"
     INDEX_MD.write_text(before + RECENT_START + new_inside + RECENT_END + after,
                         encoding="utf-8", newline="\n")
     return True
-
-
-def append_tag_suggestion(suggestion: str, url: str, title: str) -> None:
-    line = f"- `{suggestion}` — suggested for [{title}]({url}) on {datetime.date.today().isoformat()}\n"
-    header = "# Tag suggestions\n\nAppended by the capture pipeline when the vocabulary fits poorly.\nPromote to CLAUDE.md vocabulary manually when ~5+ notes would use one.\n\n"
-    if TAG_SUGGESTIONS.exists():
-        TAG_SUGGESTIONS.write_text(TAG_SUGGESTIONS.read_text(encoding="utf-8") + line, encoding="utf-8", newline="\n")
-    else:
-        TAG_SUGGESTIONS.write_text(header + line, encoding="utf-8", newline="\n")
 
 
 # -------------------------------------------------------------- event inputs
@@ -425,17 +501,23 @@ def main() -> int:
     if not fetched.ok:
         print(f"::warning::fetch failed: {fetched.error}")
 
-    llm, llm_error = run_llm(media, url, fetched)
+    llm, llm_error = run_summarize(media, url, fetched)
     if llm is None:
-        print(f"::warning::LLM step failed: {llm_error}")
+        print(f"::warning::LLM summarize failed: {llm_error}")
 
-    path, title, tags, suggested = build_note(url, media, thought, fetched, llm, llm_error)
+    tags, new_tags, canon_err = canonicalize((llm or {}).get("tags", []), existing_tags())
+    if canon_err:
+        print(f"::warning::{canon_err}")
+    for tag, desc in new_tags.items():
+        created = ensure_hub(tag, desc)
+        if created:
+            print(f"new hub: {created.relative_to(REPO_ROOT)}")
+
+    path, title = build_note(url, media, thought, fetched, llm, llm_error, tags)
     slug = path.stem
-    update_recent_strip(slug, title)
-    if suggested:
-        append_tag_suggestion(suggested, url, title)
+    update_recent_strip(slug, title, media)
 
-    print(f"note: {path.relative_to(REPO_ROOT)} | title: {title} | tags: {tags} | suggested: {suggested}")
+    print(f"note: {path.relative_to(REPO_ROOT)} | title: {title} | tags: {tags} | new hubs: {list(new_tags)}")
     gh_out = os.environ.get("GITHUB_OUTPUT")
     if gh_out:
         with open(gh_out, "a", encoding="utf-8") as f:

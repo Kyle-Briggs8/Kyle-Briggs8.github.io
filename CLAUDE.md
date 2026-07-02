@@ -59,27 +59,27 @@ NOT from the repo source — never sync truly private notes here.
   versa. Reason: the blog is the owner's voice and signal; garden notes are compost.
 - Homepage shows a "recent notes" strip (~5 most recent) as a "current interests" signal.
 
-## Tag vocabulary — the most important rules in this file
+## Tags — organic with a canonicalization guard (owner decision 2026-07-02)
 
-Notes are tagged from a CONTROLLED VOCABULARY of exactly these 17 tags:
+Tags EMERGE from captured content; there is no fixed vocabulary. The danger of
+organic tags is fragmentation ("agents" vs "ai-agents" vs "agentic-systems"
+turns the graph to mush), so the pipeline runs TWO passes:
 
-**Technical / AI:** agentic-systems, llm-evals, rag-and-retrieval, ai-security,
-ml-infrastructure, geoint, cybersecurity
-**Domain / industry:** gov-tech, startups, venture-capital, big-tech
-**Money:** personal-finance, markets-and-investing
-**Life / mind:** career-strategy, fitness, math-and-puzzles, ideas-worth-stealing
+1. **Propose:** the summarizer LLM suggests 1–3 kebab-case categories — broad
+   enough to recur across many items, never one-off descriptors.
+2. **Canonicalize:** a second LLM pass compares every proposed tag against ALL
+   tags already used in the garden and maps synonyms/near-duplicates onto the
+   existing tag. Only genuinely distinct concepts survive as new tags. (Plus a
+   cheap algorithmic fold for case/plural variants before the LLM pass.)
 
-Rules (reason: freestyle tags fragment the graph into near-duplicate clusters —
-"agents" vs "agentic-systems" vs "AI agents" — and the graph turns to mush):
-
-1. Every note gets 1–3 tags. Never more than 3. Never zero.
-2. The LLM picks ONLY from the list above. It never invents tags.
-3. If nothing fits well, the LLM appends a suggestion to `tag-suggestions.md` for
-   human review. A tag is only promoted to the vocabulary by the owner, manually,
-   and only when ~5+ notes would use it.
-4. No `misc` tag. If a note is untaggable, flag it instead of forcing a tag.
-5. Each tag has a hub page (a note named after the concept). Every tagged note links
-   to its hub page(s). Hub pages are the gravitational centers of the graph.
+Rules:
+1. Every note gets 1–3 tags. Never more than 3; zero ⇒ `needs-attention`.
+2. No `misc` tag. If a note is untaggable, flag it instead of forcing a tag.
+3. Each tag gets a hub page (a note named after the concept), AUTO-CREATED by
+   the pipeline the first time the tag is used — never pre-created empty. The
+   owner fleshes out hub framing text over time. Every tagged note links to its
+   hub page(s); hubs are the gravitational centers of the graph.
+4. Never mass-rename tags without checking every note that uses them.
 
 ## Note template — every garden note follows this shape
 
@@ -90,7 +90,7 @@ source:       # original URL
 author:       # creator of the source content
 media: article | podcast | video | tweet
 date:         # date saved, YYYY-MM-DD
-tags: []      # 1–3 from the vocabulary
+tags: []      # 1–3 organic tags (canonicalized against existing tags)
 publish: true # default true; false = excluded from the public build
 ```
 
@@ -117,7 +117,8 @@ deleted; the note must stand alone.
   sheet → HTTP POST) and a browser bookmarklet on Windows. Fallback: GitHub Issue
   form (Action triggers on issue open, processes, closes the issue).
 - Flow: receive URL → detect media type → fetch content → LLM generates TL;DR +
-  summary + tags (vocabulary-constrained) → commit templated note → Quartz rebuilds.
+  summary + organic tags → canonicalization pass dedupes tags against the garden →
+  auto-create hub pages for new tags → commit templated note → Quartz rebuilds.
 - Content fetching: article scrape; YouTube via transcript; podcast via the episode's
   SHOW NOTES description, NOT audio transcription (reason: transcription blows the
   $0 budget). Tweet via text extraction.

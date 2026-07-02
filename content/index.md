@@ -19,13 +19,7 @@ This site is two things: a [[blog/index|blog]] of polished writing, and a [[note
 - **Microsoft** — Machine Learning Engineering <!-- TODO: role details + dates -->
 - **Galant Ventures** — Venture Capital <!-- TODO: role + dates + one-line description -->
 
-## Timeline
-
-<!-- TODO: fill in real dates and milestones; these are scaffolding -->
-
-- **Summer 2026** — Built [GeoWatch](blog/geowatch), an open-source GEOINT dashboard that turns live news into mapped, severity-scored event intelligence.
-- **2025–2026** — <!-- TODO: internships / school milestones -->
-- **2024** — <!-- TODO: started university? early projects -->
+More: the full [[timeline]] · what I'm doing [[now]]
 
 ## Writing
 
@@ -39,9 +33,6 @@ Latest from the [[blog/index|blog]]:
 <!-- RECENT-NOTES:START -->
 - [[notes/do-things-that-dont-scale|Do Things that Don't Scale]]
 - [[notes/ai-agent-harness-loop-engineering|Learn AI Agent Harness & Loop Engineering in 19 Minutes]]
-- [[notes/intro-to-large-language-models|Introduction to Large Language Models by Andrej Karpathy]]
-- [[notes/bellingcat-geolocation|Geolocation techniques (Bellingcat)]]
-- [[notes/karpathy-english-programming-tweet|The hottest new programming language is English]]
 <!-- RECENT-NOTES:END -->
 
 

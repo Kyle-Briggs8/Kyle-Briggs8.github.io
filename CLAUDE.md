@@ -23,15 +23,18 @@ limitations: YouTube blocks transcript fetches from GitHub runners (video notes
 summarize from the description instead), and some sites' CSP blocks the
 bookmarklet (fallback: the issue form).
 
-Still true from Phase 2: the 12 seed notes are machine-drafted placeholders the
-owner plans to WIPE and replace with media he actually consumed (fix the homepage
-recent-strip and Related links when that happens; keep the 17 hubs and
-`private-test-note.md`, the publish-guardrail canary). The `publish: true`
-guardrail is fail-closed via the explicit-publish plugin — verified against pages,
-graph, search, sitemap, RSS. Deferred by owner: UI/graph styling, hiding empty
-"My thoughts" headers, landing-page TODOs. NOTE: the repo is public, so
-`publish: false` hides notes from the site but NOT from the repo source — never
-sync truly private notes here.
+Phase 4 polish pass (2026-07-02): placeholder seed notes WIPED — the garden now
+holds only the owner's real captures, the 17 hub pages, and
+`private-test-note.md` (publish-guardrail canary — never delete). Catppuccin
+theme applied (quartz-themes plugin + Latte/Mocha base colors); template CSS in
+`quartz/styles/custom.scss` (hides empty "My thoughts", AI-label badge, source
+link cards); graph tuned (tags hidden, radial global view); `/timeline` and
+`/now` pages exist (with TODOs awaiting owner's real details, same as the
+landing page bio). Analytics not set up (owner hasn't registered GoatCounter —
+one-line config when he does). The `publish: true` guardrail is fail-closed via
+the explicit-publish plugin — verified against pages, graph, search, sitemap,
+RSS. NOTE: the repo is public, so `publish: false` hides notes from the site but
+NOT from the repo source — never sync truly private notes here.
 
 ## Stack — decided, do not relitigate
 

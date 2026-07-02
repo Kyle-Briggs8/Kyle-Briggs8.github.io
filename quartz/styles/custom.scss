@@ -1,3 +1,71 @@
 @use "./variables.scss" as *;
 
-// put your custom CSS here!
+// ---------------------------------------------------------------------------
+// Garden note template polish (see CLAUDE.md "Note template")
+// ---------------------------------------------------------------------------
+
+// Hide the "💭 My thoughts" header while the section is empty (next sibling is
+// the "Related" h2). Once the owner writes anything under it, a <p> lands
+// between the two headers and the section reappears automatically.
+article h2[id="-my-thoughts"]:has(+ h2) {
+  display: none;
+}
+
+// Style a filled "My thoughts" section distinctly — owner's voice vs machine's.
+article h2[id="-my-thoughts"]:not(:has(+ h2)) {
+  &::after {
+    content: " — my words";
+    font-size: 0.55em;
+    font-weight: 400;
+    color: var(--gray);
+    vertical-align: middle;
+  }
+
+  & + p,
+  & ~ p:has(~ h2[id="related"]) {
+    border-left: 3px solid var(--tertiary);
+    padding-left: 0.9rem;
+  }
+}
+
+// The "Summary is AI-generated" disclaimer becomes a small muted badge.
+article h2[id="summary"] + p:has(> em:only-child) > em {
+  display: inline-block;
+  font-size: 0.72em;
+  font-style: normal;
+  letter-spacing: 0.02em;
+  color: var(--gray);
+  background-color: var(--lightgray);
+  border-radius: 6px;
+  padding: 0.15rem 0.6rem;
+}
+
+// Source-link line (🔗 / 🎧 first paragraph of capture notes) reads as a card.
+article > .markdown-preview-view > p:first-child:has(> a:only-child) > a {
+  display: block;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  background-color: color-mix(in srgb, var(--lightgray) 35%, transparent);
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: var(--secondary);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// General polish
+// ---------------------------------------------------------------------------
+
+// Embedded players (YouTube etc.) get soft corners matching the theme.
+article iframe {
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+}
+
+// Slightly calmer page titles.
+h1.article-title {
+  letter-spacing: -0.015em;
+}

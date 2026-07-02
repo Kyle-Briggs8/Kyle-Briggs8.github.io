@@ -12,14 +12,16 @@ startups/VC, personal finance.
 
 ## Current phase
 
-**Phase 3: capture pipeline — built, awaiting LLM key + device clients.** The site
-is live at https://kyle-briggs8.github.io (repo: Kyle-Briggs8/Kyle-Briggs8.github.io,
-deploys on push to `v5`; pushes from Actions dispatch deploy.yml explicitly since
-GITHUB_TOKEN pushes don't trigger it). The pipeline (`scripts/capture.py` +
-`.github/workflows/capture.yml`, clients documented in CAPTURE.md) is tested
-end-to-end via workflow_dispatch and the issue form. Outstanding: owner must set
-the `GEMINI_API_KEY` secret (until then notes arrive `needs-attention` with no
-summary), build the iOS Shortcut, and install the bookmarklet per CAPTURE.md.
+**Phase 4: polish (ongoing).** Phases 1–3 are COMPLETE. The site is live at
+https://kyle-briggs8.github.io (repo: Kyle-Briggs8/Kyle-Briggs8.github.io, deploys
+on push to `v5`; pushes from Actions dispatch deploy.yml explicitly since
+GITHUB_TOKEN pushes don't trigger it). The capture pipeline (`scripts/capture.py`
++ `.github/workflows/capture.yml`, clients in CAPTURE.md) is verified with all
+three clients: issue form, iOS Shortcut (2026-07-02), and bookmarklet (2026-07-02).
+`GEMINI_API_KEY` secret is set (Gemini summarizes; Groq fallback unset). Known
+limitations: YouTube blocks transcript fetches from GitHub runners (video notes
+summarize from the description instead), and some sites' CSP blocks the
+bookmarklet (fallback: the issue form).
 
 Still true from Phase 2: the 12 seed notes are machine-drafted placeholders the
 owner plans to WIPE and replace with media he actually consumed (fix the homepage

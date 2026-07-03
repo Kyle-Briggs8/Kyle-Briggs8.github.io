@@ -160,12 +160,8 @@
   const SKIP = (slug) =>
     slug === "index" || slug === "404" || slug.startsWith("tags/") || slug === "brain";
 
-  // every tag that exists anywhere → notes/<tag> pages are the hubs
-  const allTags = new Set();
-  for (const e of Object.values(index)) (e.tags || []).forEach((t) => allTags.add(t));
-
   const kindOf = (slug) => {
-    if (slug.startsWith("notes/") && allTags.has(slug.slice(6))) return "hub";
+    if (slug.startsWith("hubs/")) return "hub";
     if (slug.startsWith("notes/")) return "note";
     if (slug.startsWith("blog/")) return "blog";
     return "page";

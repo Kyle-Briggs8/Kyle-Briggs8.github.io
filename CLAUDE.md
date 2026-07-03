@@ -75,10 +75,12 @@ turns the graph to mush), so the pipeline runs TWO passes:
 Rules:
 1. Every note gets 1–3 tags. Never more than 3; zero ⇒ `needs-attention`.
 2. No `misc` tag. If a note is untaggable, flag it instead of forcing a tag.
-3. Each tag gets a hub page (a note named after the concept), AUTO-CREATED by
-   the pipeline the first time the tag is used — never pre-created empty. The
-   owner fleshes out hub framing text over time. Every tagged note links to its
-   hub page(s); hubs are the gravitational centers of the graph.
+3. Each tag gets a hub page in `content/hubs/` (NOT in the garden folder),
+   AUTO-CREATED by the pipeline the first time the tag is used — never
+   pre-created empty. The owner fleshes out hub framing text over time. Every
+   tagged note links to its hub page(s); hubs are the gravitational centers of
+   the graph/brain but stay OUT of the garden feed (owner decision 2026-07-03:
+   `/notes` is a pure newest-first list of captures with clickable #tags).
 4. Never mass-rename tags without checking every note that uses them.
 
 ## Note template — every garden note follows this shape

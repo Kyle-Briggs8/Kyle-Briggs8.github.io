@@ -34,7 +34,8 @@ from pathlib import Path
 import requests
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-NOTES_DIR = REPO_ROOT / "content" / "notes"
+NOTES_DIR = REPO_ROOT / "content" / "notes"   # captures only (the garden feed)
+HUBS_DIR = REPO_ROOT / "content" / "hubs"     # tag hub pages (graph centers)
 INDEX_MD = REPO_ROOT / "content" / "index.md"
 
 PODCAST_DOMAINS = (
@@ -297,12 +298,13 @@ def slug_tag(tag: str) -> str:
 
 
 def existing_tags() -> set[str]:
-    """Every tag currently used by any note in the garden."""
+    """Every tag currently used by any note or hub in the garden."""
     tags: set[str] = set()
-    for f in NOTES_DIR.glob("*.md"):
-        m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read_text(encoding="utf-8"), re.M)
-        if m:
-            tags.update(t.strip() for t in m.group(1).split(",") if t.strip())
+    for d in (NOTES_DIR, HUBS_DIR):
+        for f in d.glob("*.md"):
+            m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read_text(encoding="utf-8"), re.M)
+            if m:
+                tags.update(t.strip() for t in m.group(1).split(",") if t.strip())
     return tags
 
 
@@ -344,8 +346,9 @@ def canonicalize(proposed: list[str], known: set[str]) -> tuple[list[str], dict[
 
 
 def ensure_hub(tag: str, description: str) -> Path | None:
-    """Create content/notes/<tag>.md if this tag has no hub page yet."""
-    path = NOTES_DIR / f"{tag}.md"
+    """Create content/hubs/<tag>.md if this tag has no hub page yet."""
+    HUBS_DIR.mkdir(parents=True, exist_ok=True)
+    path = HUBS_DIR / f"{tag}.md"
     if path.exists():
         return None
     title = tag.replace("-", " ").title()

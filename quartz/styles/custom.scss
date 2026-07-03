@@ -151,6 +151,59 @@ article {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.10);
 }
 
+// ---------- tags & the garden feed -------------------------------------------
+
+// tag chips everywhere read as clickable #hashtags
+a.internal.tag-link {
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  font-family: var(--codeFont);
+  font-size: 0.72rem;
+  color: var(--tertiary);
+  text-decoration: none;
+
+  &::before {
+    content: "#";
+    opacity: 0.7;
+  }
+
+  &:hover {
+    color: var(--secondary);
+  }
+}
+
+// the garden's auto-listing: quiet ruled feed rows
+.page-listing {
+  ul.section-ul {
+    padding-left: 0;
+  }
+
+  li.section-li {
+    list-style: none;
+    border-top: 1px solid var(--lightgray);
+    padding: 0.75rem 0;
+    margin: 0;
+
+    .section h3 a {
+      font-family: var(--headerFont);
+      font-weight: 600;
+      background: none;
+      padding: 0;
+    }
+
+    .meta {
+      font-family: var(--bodyFont);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+  }
+}
+
 // ---------- footer ------------------------------------------------------------
 
 footer {

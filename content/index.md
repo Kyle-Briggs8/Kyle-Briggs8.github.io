@@ -37,6 +37,7 @@ This site is two things: a [[blog/index|blog]] of polished writing, and a [[note
 <!-- Updated automatically by scripts/capture.py; keep the markers and the card format. -->
 <div class="card-grid">
 <!-- RECENT-NOTES:START -->
+<a class="card" href="/notes/ai-values-vs-human-values"><span class="card-kind">article</span><span class="card-title">AI models' values are very different from most people's</span></a>
 <a class="card" href="/notes/brain2qwerty-non-invasive-brain-to-text"><span class="card-kind">article</span><span class="card-title">From Brain Waves to Words: Brain2Qwerty Offers a New Path to Communication Without Surgery</span></a>
 <a class="card" href="/notes/do-things-that-dont-scale"><span class="card-kind">article</span><span class="card-title">Do Things that Don't Scale</span></a>
 <a class="card" href="/notes/ai-agent-harness-loop-engineering"><span class="card-kind">video</span><span class="card-title">Learn AI Agent Harness &amp; Loop Engineering in 19 Minutes</span></a>

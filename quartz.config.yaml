@@ -17,32 +17,31 @@ configuration:
     fontOrigin: googleFonts
     cdnCaching: true
     typography:
-      header: Space Grotesk
+      header: Newsreader
       body: Inter
       code: JetBrains Mono
     colors:
-      # Catppuccin Latte (light) / Mocha (dark) — keeps graph, search, and
-      # popover CSS vars in step with the quartz-themes catppuccin skin.
+      # Minimal editorial: ivory paper + ink, warm dark-paper mode.
       lightMode:
-        light: "#eff1f5"        # latte base
-        lightgray: "#ccd0da"    # latte surface0
-        gray: "#9ca0b0"         # latte overlay0
-        darkgray: "#4c4f69"     # latte text
-        dark: "#4c4f69"         # latte text
-        secondary: "#1e66f5"    # latte blue
-        tertiary: "#179299"     # latte teal
-        highlight: "rgba(30, 102, 245, 0.11)"
-        textHighlight: "#df8e1d44"  # latte yellow
+        light: "#faf9f6"        # ivory paper
+        lightgray: "#e8e5df"    # hairline borders
+        gray: "#a39d8f"         # muted warm gray
+        darkgray: "#3d3a34"     # body ink
+        dark: "#191919"         # headline ink
+        secondary: "#31506e"    # editorial ink blue (links, graph)
+        tertiary: "#8a8168"     # warm olive-taupe accents
+        highlight: "rgba(138, 129, 104, 0.09)"
+        textHighlight: "#f5e6a344"
       darkMode:
-        light: "#1e1e2e"        # mocha base
-        lightgray: "#313244"    # mocha surface0
-        gray: "#6c7086"         # mocha overlay0
-        darkgray: "#cdd6f4"     # mocha text
-        dark: "#cdd6f4"         # mocha text
-        secondary: "#89b4fa"    # mocha blue
-        tertiary: "#94e2d5"     # mocha teal
-        highlight: "rgba(137, 180, 250, 0.13)"
-        textHighlight: "#f9e2af44"  # mocha yellow
+        light: "#171614"        # warm near-black paper
+        lightgray: "#2d2b26"
+        gray: "#7d786c"
+        darkgray: "#c9c4b8"
+        dark: "#ece8de"
+        secondary: "#a9bdd4"    # pale ink blue
+        tertiary: "#b3ab8c"
+        highlight: "rgba(179, 171, 140, 0.10)"
+        textHighlight: "#f5e6a326"
 plugins:
   - source: github:quartz-community/created-modified-date
     enabled: true

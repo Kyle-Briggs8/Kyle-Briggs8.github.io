@@ -13,3 +13,4 @@ replit.nix
 quartz/cli/tui/dist/
 
 __pycache__/
+_scratch/

@@ -60,3 +60,9 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
+      # The Pages backend occasionally rejects deployments with a transient
+      # "Deployment failed, try again later" — one automatic retry absorbs it.
+      - name: Retry deploy (transient Pages failure)
+        if: steps.deployment.outcome == 'failure'
+        uses: actions/deploy-pages@v4

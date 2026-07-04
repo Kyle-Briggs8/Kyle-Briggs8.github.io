@@ -1,0 +1,113 @@
+# Pages CMS configuration — edit the whole site at https://app.pagescms.org
+# Only GitHub users with write access to this repo can save (i.e., the owner).
+# Every save is a commit to v5, which auto-deploys the site (~2 min).
+
+media:
+  input: content/static
+  output: /static
+
+content:
+  # ---- single pages ---------------------------------------------------------
+  - name: homepage
+    label: "🏠 Homepage (bio, work, sections)"
+    type: file
+    path: content/index.md
+    fields:
+      - { name: title, label: Title, type: string }
+      - { name: date, label: Date, type: date }
+      - { name: publish, label: Published, type: boolean }
+      - name: body
+        label: "Page content (markdown + the Work/cards HTML)"
+        type: code
+        options: { language: markdown }
+
+  - name: timeline
+    label: "📆 Timeline"
+    type: file
+    path: content/timeline.md
+    fields:
+      - { name: title, label: Title, type: string }
+      - { name: publish, label: Published, type: boolean }
+      - { name: body, label: Content, type: code, options: { language: markdown } }
+
+  - name: now
+    label: "⏳ Now"
+    type: file
+    path: content/now.md
+    fields:
+      - { name: title, label: Title, type: string }
+      - { name: publish, label: Published, type: boolean }
+      - { name: body, label: Content, type: code, options: { language: markdown } }
+
+  - name: garden-index
+    label: "🌱 Garden intro"
+    type: file
+    path: content/notes/index.md
+    fields:
+      - { name: title, label: Title, type: string }
+      - { name: publish, label: Published, type: boolean }
+      - { name: body, label: Intro text, type: code, options: { language: markdown } }
+
+  - name: blog-index
+    label: "✍️ Blog intro"
+    type: file
+    path: content/blog/index.md
+    fields:
+      - { name: title, label: Title, type: string }
+      - { name: publish, label: Published, type: boolean }
+      - { name: body, label: Intro text, type: code, options: { language: markdown } }
+
+  # ---- collections -----------------------------------------------------------
+  - name: blog
+    label: "✍️ Blog posts"
+    type: collection
+    path: content/blog
+    filename: "{fields.title}.md"
+    exclude: [index.md]
+    view:
+      fields: [title, date, publish]
+      sort: [date]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: date, label: Date, type: date }
+      - { name: description, label: Description (for previews/OG), type: text }
+      - { name: publish, label: Published, type: boolean, default: true }
+      - { name: body, label: Post, type: rich-text }
+
+  - name: notes
+    label: "🌱 Garden notes"
+    type: collection
+    path: content/notes
+    exclude: [index.md]
+    view:
+      fields: [title, media, date, publish]
+      sort: [date]
+      default: { sort: date, order: desc }
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: source, label: Source URL, type: string }
+      - { name: author, label: Author, type: string }
+      - name: media
+        label: Media type
+        type: select
+        options: { values: [article, video, podcast, tweet] }
+      - { name: date, label: Date saved, type: date }
+      - { name: tags, label: Tags, type: string, list: true }
+      - { name: publish, label: Published, type: boolean, default: true }
+      - name: body
+        label: "Note (raw markdown — keeps the template intact)"
+        type: code
+        options: { language: markdown }
+
+  - name: hubs
+    label: "#️⃣ Tag hubs"
+    type: collection
+    path: content/hubs
+    view:
+      fields: [title]
+    fields:
+      - { name: title, label: Title, type: string, required: true }
+      - { name: tags, label: Tag, type: string, list: true }
+      - { name: publish, label: Published, type: boolean, default: true }
+      - { name: body, label: Framing text, type: code, options: { language: markdown } }

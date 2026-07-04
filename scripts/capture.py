@@ -30,8 +30,14 @@ import re
 import sys
 import urllib.parse
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 import requests
+
+def today() -> str:
+    """Owner-local date (US Eastern) — runners are UTC, which stamped evening
+    captures with tomorrow's date."""
+    return datetime.datetime.now(ZoneInfo("America/New_York")).date().isoformat()
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 NOTES_DIR = REPO_ROOT / "content" / "notes"   # captures only (the garden feed)
@@ -398,7 +404,7 @@ def build_embed(media: str, url: str, title: str, fetched: FetchResult) -> str:
 
 
 def build_note(url, media, thought, fetched, llm, llm_error, tags) -> tuple[Path, str]:
-    today = datetime.date.today().isoformat()
+    today = today()
     needs_attention = (not fetched.ok) or (llm is None) or (not tags)
 
     title = (llm or {}).get("title") or fetched.title or url
@@ -508,7 +514,7 @@ def append_thought(note_path: Path, thought: str) -> bool:
     if idx == -1:
         return False
     insert_at = idx + len(marker)
-    stamp = datetime.date.today().isoformat()
+    stamp = today()
     addition = f"\n{thought} *({stamp})*\n"
     note_path.write_text(text[:insert_at] + addition + text[insert_at:],
                          encoding="utf-8", newline="\n")

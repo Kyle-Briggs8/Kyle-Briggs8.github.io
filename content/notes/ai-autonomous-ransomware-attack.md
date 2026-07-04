@@ -3,7 +3,7 @@ title: "First Documented Autonomous AI Ransomware Attack"
 source: https://www.the-independent.com/tech/security/ai-cyber-security-ransomware-attack-b3008237.html?shem=rimspwouohe,
 author: "Anthony Cuthbertson"
 media: article
-date: 2026-07-04
+date: 2026-07-03
 tags: [artificial-intelligence, cybersecurity, ransomware]
 publish: true
 ---

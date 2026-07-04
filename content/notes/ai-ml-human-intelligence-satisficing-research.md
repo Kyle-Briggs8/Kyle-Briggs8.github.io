@@ -2,7 +2,7 @@
 title: "Research on AI, Machine Learning, Human Intelligence, and Satisficing"
 source: https://news.stanford.edu/stories/2026/06/ai-machine-learning-human-intelligence-satisficing-research
 media: article
-date: 2026-07-04
+date: 2026-07-03
 tags: [artificial-intelligence, cognitive-science, decision-making]
 publish: true
 needs-attention: true

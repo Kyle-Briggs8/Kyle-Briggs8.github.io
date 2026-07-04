@@ -46,7 +46,10 @@ plugins:
   - source: github:quartz-community/created-modified-date
     enabled: true
     options:
-      defaultDateType: modified
+      # Show the capture date (frontmatter `date:`), not last-modified — git
+      # commit timestamps get rewritten by the workflow's rebases, which made
+      # note dates drift (owner noticed 2026-07-04).
+      defaultDateType: created
       priority:
         - frontmatter
         - git

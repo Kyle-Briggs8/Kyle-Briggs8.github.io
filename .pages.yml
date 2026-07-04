@@ -103,11 +103,10 @@ content:
   - name: hubs
     label: "#️⃣ Tag hubs"
     type: collection
-    path: content/hubs
+    path: content/tags
     view:
       fields: [title]
     fields:
       - { name: title, label: Title, type: string, required: true }
-      - { name: tags, label: Tag, type: string, list: true }
       - { name: publish, label: Published, type: boolean, default: true }
-      - { name: body, label: Framing text, type: code, options: { language: markdown } }
+      - { name: body, label: Framing text (listing renders below it automatically), type: code, options: { language: markdown } }

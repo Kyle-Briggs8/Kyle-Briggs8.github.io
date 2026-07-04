@@ -162,7 +162,7 @@ plugins:
     options:
       # Blog and Garden appear as single entries: their contents are navigated
       # via the brain/graph/hubs (garden) and the blog index, not the sidebar.
-      filterFn: "(node) => node.slugSegment !== 'tags' && node.slugSegments[0] !== 'hubs' && !(['notes', 'blog'].includes(node.slugSegments[0]) && node.slugSegments.length > 1)"
+      filterFn: "(node) => node.slugSegment !== 'tags' && !(['notes', 'blog'].includes(node.slugSegments[0]) && node.slugSegments.length > 1)"
     layout:
       position: left
       priority: 50

@@ -1,6 +1,5 @@
 ---
 title: RAG & Retrieval
-tags: [rag-and-retrieval]
 publish: true
 ---
 

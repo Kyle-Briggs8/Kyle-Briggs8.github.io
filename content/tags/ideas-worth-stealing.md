@@ -1,6 +1,5 @@
 ---
 title: Ideas Worth Stealing
-tags: [ideas-worth-stealing]
 publish: true
 ---
 

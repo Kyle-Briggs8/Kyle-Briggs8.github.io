@@ -1,6 +1,5 @@
 ---
 title: Ethics
-tags: [ethics]
 publish: true
 ---
 

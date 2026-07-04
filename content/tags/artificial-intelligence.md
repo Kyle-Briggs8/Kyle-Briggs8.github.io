@@ -1,6 +1,5 @@
 ---
 title: Artificial Intelligence
-tags: [artificial-intelligence]
 publish: true
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: Agentic Systems
-tags: [agentic-systems]
 publish: true
 ---
 

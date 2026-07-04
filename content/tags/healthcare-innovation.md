@@ -1,6 +1,5 @@
 ---
 title: Healthcare Innovation
-tags: [healthcare-innovation]
 publish: true
 ---
 

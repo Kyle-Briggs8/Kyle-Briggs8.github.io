@@ -1,6 +1,5 @@
 ---
 title: Startups
-tags: [startups]
 publish: true
 ---
 

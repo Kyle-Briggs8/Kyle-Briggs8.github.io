@@ -1,6 +1,5 @@
 ---
 title: Ransomware
-tags: [ransomware]
 publish: true
 ---
 

@@ -158,10 +158,10 @@
   const index = await res.json();
 
   const SKIP = (slug) =>
-    slug === "index" || slug === "404" || slug.startsWith("tags/") || slug === "brain";
+    slug === "index" || slug === "404" || slug === "tags/index" || slug === "brain";
 
   const kindOf = (slug) => {
-    if (slug.startsWith("hubs/")) return "hub";
+    if (slug.startsWith("tags/")) return "hub";
     if (slug.startsWith("notes/")) return "note";
     if (slug.startsWith("blog/")) return "blog";
     return "page";

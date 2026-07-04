@@ -1,6 +1,5 @@
 ---
 title: Venture Capital
-tags: [venture-capital]
 publish: true
 ---
 

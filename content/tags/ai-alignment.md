@@ -1,6 +1,5 @@
 ---
 title: Ai Alignment
-tags: [ai-alignment]
 publish: true
 ---
 

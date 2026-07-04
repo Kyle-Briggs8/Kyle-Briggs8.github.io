@@ -35,7 +35,8 @@ import requests
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 NOTES_DIR = REPO_ROOT / "content" / "notes"   # captures only (the garden feed)
-HUBS_DIR = REPO_ROOT / "content" / "hubs"     # tag hub pages (graph centers)
+TAGS_DIR = REPO_ROOT / "content" / "tags"     # tag hub pages: framing text +
+                                              # Quartz auto-lists tagged content
 INDEX_MD = REPO_ROOT / "content" / "index.md"
 
 PODCAST_DOMAINS = (
@@ -298,13 +299,14 @@ def slug_tag(tag: str) -> str:
 
 
 def existing_tags() -> set[str]:
-    """Every tag currently used by any note or hub in the garden."""
+    """Every tag in the garden: note frontmatter + existing tag hub files."""
     tags: set[str] = set()
-    for d in (NOTES_DIR, HUBS_DIR):
-        for f in d.glob("*.md"):
-            m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read_text(encoding="utf-8"), re.M)
-            if m:
-                tags.update(t.strip() for t in m.group(1).split(",") if t.strip())
+    for f in NOTES_DIR.glob("*.md"):
+        m = re.search(r"^tags:\s*\[([^\]]*)\]", f.read_text(encoding="utf-8"), re.M)
+        if m:
+            tags.update(t.strip() for t in m.group(1).split(",") if t.strip())
+    if TAGS_DIR.exists():
+        tags.update(f.stem for f in TAGS_DIR.glob("*.md") if f.stem != "index")
     return tags
 
 
@@ -346,15 +348,17 @@ def canonicalize(proposed: list[str], known: set[str]) -> tuple[list[str], dict[
 
 
 def ensure_hub(tag: str, description: str) -> Path | None:
-    """Create content/hubs/<tag>.md if this tag has no hub page yet."""
-    HUBS_DIR.mkdir(parents=True, exist_ok=True)
-    path = HUBS_DIR / f"{tag}.md"
+    """Create content/tags/<tag>.md if this tag has no hub page yet.
+    Quartz's tag page renders this file's body ABOVE the auto-generated
+    listing of all content carrying the tag."""
+    TAGS_DIR.mkdir(parents=True, exist_ok=True)
+    path = TAGS_DIR / f"{tag}.md"
     if path.exists():
         return None
     title = tag.replace("-", " ").title()
     desc = description.strip() or f"Notes tagged `#{tag}`."
     path.write_text(
-        f"---\ntitle: {title}\ntags: [{tag}]\npublish: true\n---\n\n"
+        f"---\ntitle: {title}\npublish: true\n---\n\n"
         f"*Hub page for `#{tag}` — auto-created by the capture pipeline.*\n\n{desc}\n",
         encoding="utf-8", newline="\n",
     )

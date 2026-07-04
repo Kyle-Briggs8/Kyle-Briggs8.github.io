@@ -1,6 +1,5 @@
 ---
 title: Biotechnology
-tags: [biotechnology]
 publish: true
 ---
 

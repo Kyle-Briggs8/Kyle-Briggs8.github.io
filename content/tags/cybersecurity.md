@@ -1,6 +1,5 @@
 ---
 title: Cybersecurity
-tags: [cybersecurity]
 publish: true
 ---
 

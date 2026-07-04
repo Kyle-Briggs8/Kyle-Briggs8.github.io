@@ -1,6 +1,5 @@
 ---
 title: Cognitive Science
-tags: [cognitive-science]
 publish: true
 ---
 

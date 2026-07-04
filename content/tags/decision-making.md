@@ -1,6 +1,5 @@
 ---
 title: Decision Making
-tags: [decision-making]
 publish: true
 ---
 

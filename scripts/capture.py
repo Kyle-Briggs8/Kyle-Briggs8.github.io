@@ -447,7 +447,8 @@ def update_recent_strip(slug: str, title: str, media: str) -> bool:
             f'<span class="card-title">{safe_title}</span></a>')
     before, rest = text.split(RECENT_START, 1)
     inside, after = rest.split(RECENT_END, 1)
-    items = [ln for ln in inside.splitlines() if ln.strip().startswith('<a class="card"')]
+    items = [ln for ln in inside.splitlines()
+             if ln.strip().startswith('<a class="card"') and f'href="/notes/{slug}"' not in ln]
     items.insert(0, card)
     new_inside = "\n" + "\n".join(items[:MAX_RECENT]) + "\n"
     INDEX_MD.write_text(before + RECENT_START + new_inside + RECENT_END + after,
@@ -488,13 +489,33 @@ def params_from_event() -> tuple[str, str]:
 
 # ----------------------------------------------------------------------- main
 
+def strip_add(note_path: Path) -> int:
+    """Re-insert an existing note into the homepage strip. Used by the workflow
+    to repair the strip after a push race: the only file two writers share is
+    content/index.md, so on rebase conflict we take the remote version and
+    replay just our card on top of it."""
+    fm = note_path.read_text(encoding="utf-8")
+    title_m = re.search(r'^title:\s*"?(.*?)"?\s*$', fm, re.M)
+    media_m = re.search(r"^media:\s*(\w+)", fm, re.M)
+    title = title_m.group(1).replace('\\"', '"') if title_m else note_path.stem
+    media = media_m.group(1) if media_m else "article"
+    ok = update_recent_strip(note_path.stem, title, media)
+    print(f"strip-add: {note_path.stem} ({'ok' if ok else 'markers missing'})")
+    return 0 if ok else 1
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--url")
     ap.add_argument("--thought", default="")
     ap.add_argument("--from-event", action="store_true",
                     help="resolve url/thought from the GitHub Actions event payload")
+    ap.add_argument("--strip-add", metavar="NOTE_PATH",
+                    help="only re-insert the given note into the homepage strip")
     args = ap.parse_args()
+
+    if args.strip_add:
+        return strip_add(Path(args.strip_add))
 
     url, thought = (params_from_event() if args.from_event else (args.url or "", args.thought))
     if not url or not url.startswith(("http://", "https://")):

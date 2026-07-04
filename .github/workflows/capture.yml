@@ -53,10 +53,22 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add content
           git commit -m "capture: ${{ steps.capture.outputs.note_title }}"
-          for i in 1 2 3; do
-            git push && break
-            git pull --rebase && sleep 2
+          for i in 1 2 3 4 5; do
+            if git push; then exit 0; fi
+            git fetch origin v5
+            if ! git rebase origin/v5; then
+              # The only file concurrent writers share is the homepage strip
+              # (content/index.md). Take the remote version and replay just
+              # our card on top of it, then continue the rebase.
+              git checkout origin/v5 -- content/index.md
+              python scripts/capture.py --strip-add "content/notes/${{ steps.capture.outputs.note_slug }}.md"
+              git add content/index.md
+              GIT_EDITOR=true git rebase --continue || { git rebase --abort; exit 1; }
+            fi
+            sleep 3
           done
+          echo "::error::could not push after 5 attempts"
+          exit 1
 
       # Pushes made with GITHUB_TOKEN don't trigger the deploy workflow's
       # push event, so dispatch it explicitly (workflow_dispatch is exempt).

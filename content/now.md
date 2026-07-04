@@ -3,10 +3,9 @@ title: Now
 publish: true
 ---
 
-What I'm focused on at the moment. (A [/now page](https://nownownow.com/about) — updated when life changes, last touched July 2026.)
+What I'm focused on right now. (A [/now page](https://nownownow.com/about) — last touched July 2026.)
 
-<!-- TODO: keep this honest and current — replace these seeded entries -->
-
-- Building out this site's digital garden — the capture pipeline is live, so the graph grows as I read.
-- CS/Econ coursework. <!-- TODO: specifics -->
-- Training. <!-- TODO: specifics if you want fitness here -->
+- **Interning at Microsoft** on the Federal Cloud & AI Machine Learning Engine team in Redmond — AI-powered session monitoring for classified environments.
+- **Growing this garden** — the capture pipeline is live, so the [[notes/index|garden]] and the [brain](/static/brain/) grow as I read.
+- **Research with UVA's R.A.I.S.E. Lab** continues into the fall.
+- Heading into third year of CS & Economics at UVA.

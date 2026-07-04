@@ -29,9 +29,10 @@ holds only the owner's real captures, the 17 hub pages, and
 theme applied (quartz-themes plugin + Latte/Mocha base colors); template CSS in
 `quartz/styles/custom.scss` (hides empty "My thoughts", AI-label badge, source
 link cards); graph tuned (tags hidden, radial global view); `/timeline` and
-`/now` pages exist (with TODOs awaiting owner's real details, same as the
-landing page bio). Analytics not set up (owner hasn't registered GoatCounter —
-one-line config when he does). The `publish: true` guardrail is fail-closed via
+`/now` pages exist. Landing page, timeline, and /now were filled from the
+owner's resume 2026-07-03 (UVA CS/Econ '28, Microsoft Federal Cloud & AI,
+Galant, R.A.I.S.E., AI4ALL, Spectric, NGA ×2, RII; phone/SAT deliberately
+omitted from the public site). GoatCounter analytics live (code kyle-briggs). The `publish: true` guardrail is fail-closed via
 the explicit-publish plugin — verified against pages, graph, search, sitemap,
 RSS. NOTE: the repo is public, so `publish: false` hides notes from the site but
 NOT from the repo source — never sync truly private notes here.

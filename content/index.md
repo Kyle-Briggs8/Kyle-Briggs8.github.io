@@ -5,7 +5,7 @@ publish: true
 ---
 Hey, my name is Kyle. I am studying Computer Science & Economics at the University of Virginia ('28), and I'm currently a cleared software engineering intern on Microsoft's Federal Cloud & AI team. I care about AI and agentic systems, gov-tech, and the places where startups meet government.
 
-This site is two things: a [[blog/index|blog]] of polished writing, and a [[notes/index|digital garden]] of notes on what I'm reading, watching, and listening to.
+This site is two things: a [[blog/index|blog]] of writings, and a [[notes/index|digital garden]] of notes on what I'm reading, watching, and listening to.
 
 <a class="brain-cta" href="/static/brain/" data-router-ignore>🧠 Open the brain<span>the whole garden as one interactive graph — click a node to preview, dive in from there</span></a>
 

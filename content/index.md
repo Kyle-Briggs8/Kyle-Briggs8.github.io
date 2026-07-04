@@ -9,6 +9,31 @@ This site is two things: a [[blog/index|blog]] of writings, and a [[notes/index|
 
 <a class="brain-cta" href="/static/brain/" data-router-ignore>🧠 Open the brain<span>the whole garden as one interactive graph — click a node to preview, dive in from there</span></a>
 
+<p class="brain-pulse">● <span id="pulse-text">the brain is alive and growing</span></p>
+
+<script>
+(() => {
+  const rel = (d) => {
+    const s = (Date.now() - d.getTime()) / 1000;
+    if (s < 3600) return Math.max(1, Math.round(s / 60)) + " minutes ago";
+    if (s < 86400) { const h = Math.round(s / 3600); return h + (h === 1 ? " hour ago" : " hours ago"); }
+    const days = Math.round(s / 86400); return days + (days === 1 ? " day ago" : " days ago");
+  };
+  const repo = "Kyle-Briggs8/Kyle-Briggs8.github.io";
+  Promise.all([
+    fetch("https://api.github.com/repos/" + repo + "/commits?path=content/notes&per_page=1").then((r) => r.json()),
+    fetch("https://api.github.com/repos/" + repo + "/commits?path=content/notes&per_page=100&since=" + new Date(Date.now() - 7 * 864e5).toISOString()).then((r) => r.json()),
+    fetch("/static/contentIndex.json").then((r) => r.json()),
+  ]).then(([last, week, idx]) => {
+    const fed = new Date(last[0].commit.author.date);
+    const notes = week.filter((c) => c.commit.message.startsWith("capture:")).length;
+    const clusters = Object.keys(idx).filter((s) => s.startsWith("tags/") && s !== "tags/index").length;
+    const el = document.getElementById("pulse-text");
+    if (el) el.textContent = "last fed " + rel(fed) + " · " + notes + (notes === 1 ? " note" : " notes") + " this week · " + clusters + " clusters";
+  }).catch(() => {});
+})();
+</script>
+
 📫 [kyl3.briggs@gmail.com](mailto:kyl3.briggs@gmail.com) · [GitHub](https://github.com/Kyle-Briggs8) · [LinkedIn](https://www.linkedin.com/in/kyle-briggs-/) · [[timeline|Timeline]] · [[now|Now]]
 
 <!-- TODO: headshot — drop an image into content/static/ and embed here -->

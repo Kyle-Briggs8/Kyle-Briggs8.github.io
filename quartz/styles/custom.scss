@@ -298,6 +298,19 @@ a.card:hover {
   }
 }
 
+// the heartbeat line under the brain CTA
+.brain-pulse {
+  font-family: var(--codeFont);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--gray);
+  margin: -0.4rem 0 1rem 0.2rem;
+
+  &::first-letter {
+    color: #2ea043; // status-dot green
+  }
+}
+
 // LinkedIn-style work timeline, editorial edition
 .xp {
   position: relative;

@@ -48,13 +48,19 @@ jobs:
         run: python scripts/capture.py --from-event
 
       - name: Commit and push note
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add content
+          if git diff --cached --quiet; then
+            echo "nothing to commit (duplicate capture, no new thought)"
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
           git commit -m "capture: ${{ steps.capture.outputs.note_title }}"
           for i in 1 2 3 4 5; do
-            if git push; then exit 0; fi
+            if git push; then echo "committed=true" >> "$GITHUB_OUTPUT"; exit 0; fi
             git fetch origin v5
             if ! git rebase origin/v5; then
               # The only file concurrent writers share is the homepage strip
@@ -73,6 +79,7 @@ jobs:
       # Pushes made with GITHUB_TOKEN don't trigger the deploy workflow's
       # push event, so dispatch it explicitly (workflow_dispatch is exempt).
       - name: Trigger site deploy
+        if: steps.commit.outputs.committed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh workflow run deploy.yml --ref v5 -R ${{ github.repository }}
@@ -82,6 +89,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue comment ${{ github.event.issue.number }} -R ${{ github.repository }} \
-            --body "Captured ✅ → https://kyle-briggs8.github.io/notes/${{ steps.capture.outputs.note_slug }} (live after the deploy finishes, ~1 min)"
+          if [ "${{ steps.capture.outputs.duplicate }}" = "true" ]; then
+            BODY="Already in the garden ♻️ → https://kyle-briggs8.github.io/notes/${{ steps.capture.outputs.note_slug }}"
+          else
+            BODY="Captured ✅ → https://kyle-briggs8.github.io/notes/${{ steps.capture.outputs.note_slug }} (live after the deploy finishes, ~1 min)"
+          fi
+          gh issue comment ${{ github.event.issue.number }} -R ${{ github.repository }} --body "$BODY"
           gh issue close ${{ github.event.issue.number }} -R ${{ github.repository }}

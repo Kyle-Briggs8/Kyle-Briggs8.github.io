@@ -489,6 +489,32 @@ def params_from_event() -> tuple[str, str]:
 
 # ----------------------------------------------------------------------- main
 
+def find_existing_capture(url: str) -> Path | None:
+    """Exact-URL duplicate check against every note's `source:` frontmatter."""
+    for f in NOTES_DIR.glob("*.md"):
+        if f.stem == "index":
+            continue
+        m = re.search(r"^source:\s*(\S+)\s*$", f.read_text(encoding="utf-8"), re.M)
+        if m and m.group(1) == url:
+            return f
+    return None
+
+
+def append_thought(note_path: Path, thought: str) -> bool:
+    """Add a re-share's quick thought to the existing note's My thoughts section."""
+    text = note_path.read_text(encoding="utf-8")
+    marker = "## 💭 My thoughts\n"
+    idx = text.find(marker)
+    if idx == -1:
+        return False
+    insert_at = idx + len(marker)
+    stamp = datetime.date.today().isoformat()
+    addition = f"\n{thought} *({stamp})*\n"
+    note_path.write_text(text[:insert_at] + addition + text[insert_at:],
+                         encoding="utf-8", newline="\n")
+    return True
+
+
 def strip_add(note_path: Path) -> int:
     """Re-insert an existing note into the homepage strip. Used by the workflow
     to repair the strip after a push race: the only file two writers share is
@@ -522,6 +548,22 @@ def main() -> int:
         print(f"::error::no valid URL to capture (got: {url!r})")
         return 1
 
+    existing = find_existing_capture(url)
+    if existing:
+        title_m = re.search(r'^title:\s*"?(.*?)"?\s*$', existing.read_text(encoding="utf-8"), re.M)
+        title = title_m.group(1).replace('\\"', '"') if title_m else existing.stem
+        print(f"duplicate: already captured as {existing.stem} - skipping re-capture")
+        if thought:
+            if append_thought(existing, thought):
+                print("quick thought appended to the existing note's My thoughts section")
+            else:
+                print("::warning::could not find My thoughts section to append to")
+        gh_out = os.environ.get("GITHUB_OUTPUT")
+        if gh_out:
+            with open(gh_out, "a", encoding="utf-8") as f:
+                f.write(f"note_slug={existing.stem}\nnote_title={title}\nduplicate=true\n")
+        return 0
+
     media = detect_media(url)
     print(f"capture: {url} (media={media})")
 
@@ -549,7 +591,7 @@ def main() -> int:
     gh_out = os.environ.get("GITHUB_OUTPUT")
     if gh_out:
         with open(gh_out, "a", encoding="utf-8") as f:
-            f.write(f"note_slug={slug}\nnote_title={title}\n")
+            f.write(f"note_slug={slug}\nnote_title={title}\nduplicate=false\n")
     return 0
 
 

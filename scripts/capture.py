@@ -448,6 +448,55 @@ def ensure_hub(tag: str, description: str) -> Path | None:
     return path
 
 
+# --------------------------------------------- pass 3: semantic cross-links
+
+RELATED_PROMPT = """You link a new note into a personal knowledge graph.
+
+NEW NOTE: {title}
+TL;DR: {tldr}
+
+EXISTING NOTES (slug | title | tl;dr):
+{catalog}
+
+Pick 0-3 existing notes whose IDEAS genuinely connect to the new note —
+shared specific concepts, one illuminates the other, same story from another
+angle. Do NOT pick notes that merely share a broad topic. Zero is a fine
+answer.
+
+Return STRICT JSON only: {{"related": ["slug-1", "slug-2"]}}
+"""
+
+
+def _note_catalog(exclude_slug: str) -> list[tuple[str, str, str]]:
+    """(slug, title, tldr) for every published note, for the see-also pass."""
+    out = []
+    for f in sorted(NOTES_DIR.glob("*.md")):
+        if f.stem in ("index", exclude_slug):
+            continue
+        text = f.read_text(encoding="utf-8")
+        if re.search(r"^publish:\s*false", text, re.M):
+            continue
+        t = re.search(r'^title:\s*"?(.*?)"?\s*$', text, re.M)
+        tl = re.search(r"## ⚡ TL;DR\s*\n+([^\n#][^\n]*)", text)
+        out.append((f.stem, t.group(1).replace('\\"', '"') if t else f.stem,
+                    (tl.group(1).strip() if tl else "")[:220]))
+    return out
+
+
+def find_related(slug: str, title: str, tldr: str) -> list[tuple[str, str]]:
+    """LLM picks 0-3 genuinely related existing notes. Never raises."""
+    catalog = _note_catalog(exclude_slug=slug)
+    if not catalog:
+        return []
+    listing = "\n".join(f"{s} | {t} | {d}" for s, t, d in catalog)
+    result, err = llm_json(RELATED_PROMPT.format(title=title, tldr=tldr, catalog=listing))
+    if result is None:
+        print(f"::warning::see-also pass skipped: {err}")
+        return []
+    valid = {s: t for s, t, _ in catalog}
+    return [(s, valid[s]) for s in (result.get("related") or [])[:3] if s in valid]
+
+
 # ------------------------------------------------------------- note assembly
 
 def slugify(text: str) -> str:
@@ -486,7 +535,7 @@ def build_embed(media: str, url: str, title: str, fetched: FetchResult) -> str:
     return f"🔗 [{title or url}]({url})"
 
 
-def build_note(url, media, thought, fetched, llm, llm_error, tags) -> tuple[Path, str]:
+def build_note(url, media, thought, fetched, llm, llm_error, tags, see_also=()) -> tuple[Path, str]:
     date_str = today()
     needs_attention = (not fetched.ok) or (llm is None) or (not tags)
 
@@ -512,6 +561,8 @@ def build_note(url, media, thought, fetched, llm, llm_error, tags) -> tuple[Path
         body += [thought, ""]
     related = " · ".join(f"[[{t}]]" for t in tags) or "_(untagged — needs attention)_"
     body += ["## Related", "", related, ""]
+    if see_also:
+        body += ["**See also:** " + " · ".join(f"[[{s}|{t}]]" for s, t in see_also), ""]
 
     path = unique_note_path(slug)
     path.write_text("\n".join(fm) + "\n\n" + "\n".join(body), encoding="utf-8", newline="\n")
@@ -672,7 +723,12 @@ def main() -> int:
         if created:
             print(f"new hub: {created.relative_to(REPO_ROOT)}")
 
-    path, title = build_note(url, media, thought, fetched, llm, llm_error, tags)
+    see_also = []
+    if llm:
+        see_also = find_related("", llm.get("title") or fetched.title or "",
+                                llm.get("tldr") or "")
+
+    path, title = build_note(url, media, thought, fetched, llm, llm_error, tags, see_also)
     slug = path.stem
     update_recent_strip(slug, title, media)
 

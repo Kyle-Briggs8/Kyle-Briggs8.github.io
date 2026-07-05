@@ -45,6 +45,8 @@ jobs:
         run: npx quartz plugin install
       - name: Build Quartz
         run: npx quartz build
+      - name: Generate brain time-lapse metadata
+        run: python3 scripts/brain_meta.py
       - name: Generate live OG card (brain-graph share image)
         run: |
           cp scripts/og-card.html public/og-card-src.html

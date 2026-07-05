@@ -112,6 +112,27 @@
   }
   #close:hover { color: var(--text); border-color: var(--muted); }
 
+  /* time-lapse scrubber */
+  #timelapse {
+    position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%); z-index: 5;
+    display: none; align-items: center; gap: 0.8rem;
+    background: rgba(30, 30, 46, 0.75); backdrop-filter: blur(10px);
+    border: 1px solid rgba(203, 166, 247, 0.3); border-radius: 999px;
+    padding: 0.45rem 1rem;
+  }
+  #timelapse.ready { display: flex; }
+  #tl-play {
+    background: none; border: 1px solid var(--mauve); color: var(--mauve);
+    border-radius: 999px; width: 1.9rem; height: 1.9rem; cursor: pointer;
+    font-size: 0.75rem; transition: all 0.2s ease;
+  }
+  #tl-play:hover { box-shadow: 0 0 12px rgba(203, 166, 247, 0.5); }
+  #tl-range { width: min(280px, 34vw); accent-color: #cba6f7; }
+  #tl-date {
+    font-family: "IBM Plex Mono", monospace; font-size: 0.68rem;
+    color: var(--subtext); min-width: 6.2rem; text-align: left;
+  }
+
   @media (max-width: 640px) {
     #panel { top: auto; left: 0; right: 0; width: 100%; height: 62vh; padding-top: 2.6rem;
       border-left: none; border-top: 1px solid rgba(203, 166, 247, 0.35);
@@ -119,6 +140,7 @@
     #panel.open { transform: translateY(0); }
     .legend { display: none; }
     .hint { display: none; }
+    #timelapse { bottom: 0.6rem; }
   }
 </style>
 </head>
@@ -139,6 +161,12 @@
   <span class="l-note">note</span>
   <span class="l-blog">blog</span>
   <span class="l-page">page</span>
+</div>
+
+<div id="timelapse">
+  <button id="tl-play" aria-label="Play time-lapse">▶</button>
+  <input id="tl-range" type="range" min="0" max="100" value="100" />
+  <span id="tl-date">today</span>
 </div>
 
 <aside id="panel" aria-live="polite">
@@ -285,6 +313,49 @@
     byId.get(typeof l.target === "object" ? l.target.id : l.target)?.kind === "hub" ? 70 : 45);
 
   setTimeout(() => g.zoomToFit(600, 60), 700);
+
+  // ---- time-lapse: watch the brain grow (dates from brain-meta.json) ----
+  try {
+    const meta = await fetch("/static/brain-meta.json").then((r) => (r.ok ? r.json() : null));
+    const dates = meta && meta.dates;
+    if (dates) {
+      const stamps = nodes.map((n) => dates[n.id]).filter(Boolean).map((d) => +new Date(d));
+      if (stamps.length > 2) {
+        const min = Math.min(...stamps), max = Math.max(...stamps);
+        nodes.forEach((n) => { n.born = dates[n.id] ? +new Date(dates[n.id]) : min; });
+        let threshold = Infinity;
+        const visN = (n) => n.born <= threshold;
+        g.nodeVisibility(visN).linkVisibility((l) => {
+          const s = typeof l.source === "object" ? l.source : byId.get(l.source);
+          const t = typeof l.target === "object" ? l.target : byId.get(l.target);
+          return visN(s) && visN(t);
+        });
+
+        const box = document.getElementById("timelapse");
+        const range = document.getElementById("tl-range");
+        const dateEl = document.getElementById("tl-date");
+        const play = document.getElementById("tl-play");
+        box.classList.add("ready");
+
+        const setPos = (v) => {
+          threshold = v >= 100 ? Infinity : min + (max - min) * (v / 100);
+          dateEl.textContent = v >= 100 ? "today" : new Date(threshold).toISOString().slice(0, 10);
+          g.nodeVisibility(visN); // refresh
+        };
+        range.addEventListener("input", (e) => setPos(+e.target.value));
+
+        let timer = null;
+        play.addEventListener("click", () => {
+          if (timer) { clearInterval(timer); timer = null; play.textContent = "▶"; return; }
+          let v = 0; range.value = 0; setPos(0); play.textContent = "⏸";
+          timer = setInterval(() => {
+            v += 1.25; range.value = v; setPos(Math.min(v, 100));
+            if (v >= 100) { clearInterval(timer); timer = null; play.textContent = "▶"; }
+          }, 100);
+        });
+      }
+    }
+  } catch (e) { /* no meta file: scrubber stays hidden */ }
 })();
 </script>
 </body>

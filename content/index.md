@@ -59,6 +59,7 @@ This site is two things: a [[blog/index|blog]] of writings, and a [[notes/index|
 ## Recent writing
 
 <div class="card-stack">
+<a class="card" href="/blog/self-organizing-second-brain"><span class="card-kind">essay</span><span class="card-title">I built a second brain that organizes itself</span><span class="card-sub">Share a link from my phone; two minutes later it's a node in the graph. The architecture, the war stories, the $0 bill.</span></a>
 <a class="card" href="/blog/geowatch"><span class="card-kind">essay</span><span class="card-title">GeoWatch: open-source GEOINT from live news</span><span class="card-sub">Turning a location name into a mapped, severity-scored intel dashboard — on free tiers.</span></a>
 </div>
 

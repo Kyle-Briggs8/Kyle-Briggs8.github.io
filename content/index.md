@@ -69,12 +69,12 @@ This site is two things: a [[blog/index|blog]] of writings, and a [[notes/index|
 <!-- Updated automatically by scripts/capture.py; keep the markers and the card format. -->
 <div class="card-grid">
 <!-- RECENT-NOTES:START -->
+<a class="card" href="/notes/lvmh-bernard-arnault-strategy"><span class="card-kind">podcast</span><span class="card-title">The History of LVMH and Bernard Arnault's Business Genius</span></a>
 <a class="card" href="/notes/paul-graham-yc-funding-billionaires-build"><span class="card-kind">article</span><span class="card-title">Paul Graham on How Y Combinator Funds Startups and Why Billionaires Build</span></a>
 <a class="card" href="/notes/how-to-think-for-yourself"><span class="card-kind">article</span><span class="card-title">How to Think for Yourself</span></a>
 <a class="card" href="/notes/superlinear-returns"><span class="card-kind">article</span><span class="card-title">Superlinear Returns</span></a>
 <a class="card" href="/notes/varick-agents-tweet-external-link"><span class="card-kind">tweet</span><span class="card-title">Tweet by Varick Agents containing external link</span></a>
 <a class="card" href="/notes/ai-autonomous-ransomware-attack"><span class="card-kind">article</span><span class="card-title">First Documented Autonomous AI Ransomware Attack</span></a>
-<a class="card" href="/notes/ai-ml-human-intelligence-satisficing-research"><span class="card-kind">article</span><span class="card-title">Research on AI, Machine Learning, Human Intelligence, and Satisficing</span></a>
 <!-- RECENT-NOTES:END -->
 </div>
 

@@ -160,6 +160,83 @@ def fetch_tweet(url: str) -> FetchResult:
         return FetchResult(ok=False, error=f"tweet oEmbed: {e}")
 
 
+def _spotify_type_id(url: str) -> tuple[str, str] | None:
+    m = re.search(r"open\.spotify\.com/(episode|show|track|album)/([A-Za-z0-9]+)", url)
+    return (m.group(1), m.group(2)) if m else None
+
+
+def _rss_episode_description(show: str, episode_title: str) -> str:
+    """Keyless chain to real show notes: iTunes Search maps the show name to
+    its public RSS feed; the feed item matching the episode title carries the
+    description Spotify won't serve to scrapers."""
+    search = requests.get(
+        "https://itunes.apple.com/search",
+        params={"media": "podcast", "limit": 3, "term": show},
+        timeout=HTTP_TIMEOUT, headers=UA,
+    ).json()
+    for result in search.get("results", []):
+        feed_url = result.get("feedUrl")
+        if not feed_url:
+            continue
+        rss = requests.get(feed_url, timeout=HTTP_TIMEOUT, headers=UA).text
+        want = re.sub(r"\W+", " ", episode_title).strip().lower()
+        for item in re.finditer(r"<item>(.*?)</item>", rss, re.S):
+            block = item.group(1)
+            t = re.search(r"<title>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</title>", block, re.S)
+            if not t:
+                continue
+            have = re.sub(r"\W+", " ", t.group(1)).strip().lower()
+            if want and (want == have or want in have or have in want):
+                d = (re.search(r"<description>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</description>", block, re.S)
+                     or re.search(r"<itunes:summary>(?:<!\[CDATA\[)?(.*?)(?:\]\]>)?</itunes:summary>", block, re.S))
+                if d:
+                    text = re.sub(r"<[^>]+>", " ", d.group(1))
+                    return re.sub(r"\s+", " ", text).strip()
+    return ""
+
+
+def fetch_spotify(url: str) -> FetchResult:
+    """Spotify's episode pages are a JS wall. oEmbed gives episode + show name
+    keylessly; the show's public RSS (found via iTunes Search) gives the notes."""
+    title = author = desc = ""
+    errors = []
+    try:
+        oe = requests.get("https://open.spotify.com/oembed", params={"url": url},
+                          timeout=HTTP_TIMEOUT, headers=UA)
+        oe.raise_for_status()
+        title = oe.json().get("title", "")
+    except Exception as e:  # noqa: BLE001
+        errors.append(f"spotify oEmbed: {e}")
+
+    tid = _spotify_type_id(url)
+    if tid:
+        try:
+            page = requests.get(f"https://open.spotify.com/embed/{tid[0]}/{tid[1]}",
+                                timeout=HTTP_TIMEOUT, headers=UA).text
+            m = re.search(r'"subtitle":"((?:[^"\\]|\\.)*)"', page)
+            if m:
+                author = json.loads(f'"{m.group(1)}"')
+        except Exception as e:  # noqa: BLE001
+            errors.append(f"spotify embed page: {e}")
+
+    if title and author:
+        try:
+            desc = _rss_episode_description(author, title)
+        except Exception as e:  # noqa: BLE001
+            errors.append(f"rss lookup: {e}")
+
+    if title and author:
+        title = f"{title} ({author})"
+    ok = bool(title or desc)
+    return FetchResult(title, author, desc, ok=ok, error="; ".join(errors))
+
+
+def fetch_podcast(url: str) -> FetchResult:
+    if "open.spotify.com" in url:
+        return fetch_spotify(url)
+    return fetch_article(url)  # other podcast hosts: scrape the episode page
+
+
 def fetch_article(url: str) -> FetchResult:
     """Articles AND podcasts (episode page show notes). Readability-style."""
     try:
@@ -178,7 +255,7 @@ def fetch_article(url: str) -> FetchResult:
         return FetchResult(ok=False, error=f"article fetch: {e}")
 
 
-FETCHERS = {"video": fetch_video, "tweet": fetch_tweet, "article": fetch_article, "podcast": fetch_article}
+FETCHERS = {"video": fetch_video, "tweet": fetch_tweet, "article": fetch_article, "podcast": fetch_podcast}
 
 
 # ----------------------------------------------------------------- LLM calls
@@ -398,13 +475,19 @@ def build_embed(media: str, url: str, title: str, fetched: FetchResult) -> str:
         text = fetched.tweet_text or "(tweet text unavailable — see needs-attention)"
         author = fetched.author or "unknown author"
         return f"> {text}\n>\n> — {author}\n\n*Original: [{url}]({url})*"
-    icon = "🎧" if media == "podcast" else "🔗"
-    label = title or url
-    return f"{icon} [{label}]({url})"
+    if media == "podcast":
+        tid = _spotify_type_id(url)
+        if tid:  # real player embed; the plain link below it is the fallback
+            return (f'<iframe src="https://open.spotify.com/embed/{tid[0]}/{tid[1]}" '
+                    f'width="100%" height="152" frameborder="0" loading="lazy" '
+                    f'allow="encrypted-media"></iframe>\n\n'
+                    f"🎧 [{title or url}]({url})")
+        return f"🎧 [{title or url}]({url})"
+    return f"🔗 [{title or url}]({url})"
 
 
 def build_note(url, media, thought, fetched, llm, llm_error, tags) -> tuple[Path, str]:
-    today = today()
+    date_str = today()
     needs_attention = (not fetched.ok) or (llm is None) or (not tags)
 
     title = (llm or {}).get("title") or fetched.title or url
@@ -417,7 +500,7 @@ def build_note(url, media, thought, fetched, llm, llm_error, tags) -> tuple[Path
     fm = ["---", f"title: {yaml_escape(title)}", f"source: {url}"]
     if author:
         fm.append(f"author: {yaml_escape(author)}")
-    fm += [f"media: {media}", f"date: {today}", f"tags: [{', '.join(tags)}]", "publish: true"]
+    fm += [f"media: {media}", f"date: {date_str}", f"tags: [{', '.join(tags)}]", "publish: true"]
     if needs_attention:
         fm.append("needs-attention: true")
     fm.append("---")

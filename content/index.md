@@ -69,12 +69,12 @@ This site is two things: a [[blog/index|blog]] of writings, and a [[notes/index|
 <!-- Updated automatically by scripts/capture.py; keep the markers and the card format. -->
 <div class="card-grid">
 <!-- RECENT-NOTES:START -->
+<a class="card" href="/notes/money-stuff-market-structure-hedge-funds-tokenization"><span class="card-kind">podcast</span><span class="card-title">Money Stuff: Market Structure, Hedge Funds, and Tokenization</span></a>
 <a class="card" href="/notes/one-big-blob-of-elon-money-stuff-the-podcast"><span class="card-kind">podcast</span><span class="card-title">One Big Blob of Elon (Money Stuff: The Podcast)</span></a>
 <a class="card" href="/notes/money-stuff-financial-markets-betting"><span class="card-kind">podcast</span><span class="card-title">Money Stuff: Financial Markets, Sports Betting, and Short Selling</span></a>
 <a class="card" href="/notes/lvmh-bernard-arnault-strategy"><span class="card-kind">podcast</span><span class="card-title">The History of LVMH and Bernard Arnault's Business Genius</span></a>
 <a class="card" href="/notes/paul-graham-yc-funding-billionaires-build"><span class="card-kind">article</span><span class="card-title">Paul Graham on How Y Combinator Funds Startups and Why Billionaires Build</span></a>
 <a class="card" href="/notes/how-to-think-for-yourself"><span class="card-kind">article</span><span class="card-title">How to Think for Yourself</span></a>
-<a class="card" href="/notes/superlinear-returns"><span class="card-kind">article</span><span class="card-title">Superlinear Returns</span></a>
 <!-- RECENT-NOTES:END -->
 </div>
 

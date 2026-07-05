@@ -84,7 +84,17 @@ Rules:
    carry NO tags frontmatter (they'd list themselves). Hubs are the graph's
    gravitational centers but stay OUT of the garden feed (owner decision
    2026-07-03: `/notes` is a pure newest-first list of captures).
-4. Never mass-rename tags without checking every note that uses them.
+4. Never mass-rename tags without checking every note that uses them —
+   EXCEPT via the gardener (below), which exists for exactly this.
+5. **The taxonomy self-regulates at scale** (owner decision 2026-07-05, "I
+   don't want to keep folding"): `scripts/gardener.py` runs weekly
+   (`gardener.yml`, Mondays) and (a) folds tags with <2 notes past a 14-day
+   grace period into their best-fit healthy tag — rewriting notes, deleting
+   the hub — and (b) retags any zero-tag notes from the existing tag set.
+   A hub with `pinned: true` frontmatter is never folded (editable in Pages
+   CMS; currently pinned: llm-evals, rag-and-retrieval, economics). The
+   brain also renders hub prominence proportional to note count, so thin
+   tags are visually quiet until they earn their glow.
 
 ## Note template — every garden note follows this shape
 

@@ -1,6 +1,7 @@
 ---
 title: Economics
 publish: true
+pinned: true
 ---
 
 *Hub page for `#economics` — auto-created by the capture pipeline.*

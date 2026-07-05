@@ -204,7 +204,7 @@
                 content: e.content || "", kind: kindOf(slug), degree: 0 };
     nodes.push(n); byId.set(slug, n);
   }
-  const links = [];
+  let links = [];
   for (const [slug, e] of Object.entries(index)) {
     if (!byId.has(slug)) continue;
     for (const target of e.links || []) {
@@ -213,6 +213,17 @@
         byId.get(slug).degree++; byId.get(target).degree++;
       }
     }
+  }
+
+  // A category only materializes as a node once it has 2+ notes — thin tags
+  // stay clickable on the site but don't clutter the brain.
+  const HUB_MIN = 2;
+  const hidden = new Set(nodes.filter((n) => n.kind === "hub" && n.degree < HUB_MIN).map((n) => n.id));
+  if (hidden.size) {
+    for (let i = nodes.length - 1; i >= 0; i--) {
+      if (hidden.has(nodes[i].id)) { byId.delete(nodes[i].id); nodes.splice(i, 1); }
+    }
+    links = links.filter((l) => !hidden.has(l.source) && !hidden.has(l.target));
   }
 
   // Hub prominence is EARNED: a one-note hub is barely bigger than a note;

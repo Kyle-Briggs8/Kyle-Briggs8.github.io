@@ -1,6 +1,7 @@
 ---
 title: LLM Evals
 publish: true
+pinned: true
 ---
 
 *Hub page for `#llm-evals`.*

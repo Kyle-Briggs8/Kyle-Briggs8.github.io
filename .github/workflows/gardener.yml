@@ -1,0 +1,60 @@
+name: Gardener (weekly tag pruning)
+
+on:
+  schedule:
+    - cron: "0 13 * * 1" # Mondays, morning US Eastern
+  workflow_dispatch:
+    inputs:
+      grace_days:
+        description: Days a thin tag is protected before folding
+        default: "14"
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Prune thin tags, heal untagged notes
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          GARDENER_GRACE_DAYS: ${{ inputs.grace_days || '14' }}
+        run: python scripts/gardener.py
+
+      - name: Commit and push
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content
+          if git diff --cached --quiet; then
+            echo "garden already tidy"
+            echo "committed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "gardener: fold thin tags, heal untagged notes"
+          for i in 1 2 3 4 5; do
+            if git push; then echo "committed=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+            git fetch origin v5
+            git rebase origin/v5 || { git rebase --abort; exit 1; }
+            sleep 3
+          done
+          exit 1
+
+      - name: Trigger site deploy
+        if: steps.commit.outputs.committed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref v5 -R ${{ github.repository }}

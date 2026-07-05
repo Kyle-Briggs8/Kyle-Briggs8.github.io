@@ -302,16 +302,24 @@ def call_groq(prompt: str) -> dict:
 
 
 def llm_json(prompt: str) -> tuple[dict | None, str]:
-    """Gemini first, Groq fallback. Returns (parsed_json, error_string)."""
+    """Gemini first, Groq fallback, with backoff on free-tier rate limits.
+    Returns (parsed_json, error_string)."""
+    import time
     errors = []
-    for name, fn, env in (("gemini", call_gemini, "GEMINI_API_KEY"), ("groq", call_groq, "GROQ_API_KEY")):
-        if not os.environ.get(env):
-            errors.append(f"{name}: no {env}")
+    for attempt in range(3):
+        errors = []
+        for name, fn, env in (("gemini", call_gemini, "GEMINI_API_KEY"), ("groq", call_groq, "GROQ_API_KEY")):
+            if not os.environ.get(env):
+                errors.append(f"{name}: no {env}")
+                continue
+            try:
+                return fn(prompt), ""
+            except Exception as e:  # noqa: BLE001
+                errors.append(f"{name}: {e}")
+        if any("429" in e for e in errors) and attempt < 2:
+            time.sleep(35)  # RPM window reset
             continue
-        try:
-            return fn(prompt), ""
-        except Exception as e:  # noqa: BLE001
-            errors.append(f"{name}: {e}")
+        break
     return None, "; ".join(errors)
 
 

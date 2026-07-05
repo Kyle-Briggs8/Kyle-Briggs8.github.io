@@ -1,6 +1,7 @@
 ---
 title: RAG & Retrieval
 publish: true
+pinned: true
 ---
 
 *Hub page for `#rag-and-retrieval`.*

@@ -215,7 +215,12 @@
     }
   }
 
-  const radius = (n) => (n.kind === "hub" ? 6 : 3.5) + Math.sqrt(n.degree) * 1.6;
+  // Hub prominence is EARNED: a one-note hub is barely bigger than a note;
+  // only well-fed hubs read as gravitational centers.
+  const radius = (n) => n.kind === "hub"
+    ? 3.5 + Math.sqrt(n.degree) * 2.2
+    : 3.5 + Math.sqrt(n.degree) * 1.2;
+  const isThinHub = (n) => n.kind === "hub" && n.degree <= 1;
 
   // hover neighborhood highlighting
   let hoverNode = null;
@@ -269,11 +274,11 @@
     const color = COLORS[n.kind];
 
     ctx.save();
-    ctx.globalAlpha = dimmed ? 0.12 : 1;
+    ctx.globalAlpha = dimmed ? 0.12 : isThinHub(n) ? 0.55 : 1;
 
-    // neon glow
+    // neon glow scales with how fed the hub is
     ctx.shadowColor = color;
-    ctx.shadowBlur = n.kind === "hub" ? 24 : 12;
+    ctx.shadowBlur = n.kind === "hub" ? Math.min(10 + n.degree * 4, 28) : 12;
     ctx.beginPath();
     ctx.arc(n.x, n.y, r, 0, 2 * Math.PI);
     ctx.fillStyle = color;
@@ -290,8 +295,8 @@
     ctx.fillStyle = color;
     ctx.fill();
 
-    // labels: hubs always (when zoomed enough), others on hover
-    const showLabel = (n.kind === "hub" && scale > 0.9) || hoverNode === n;
+    // labels: only well-fed hubs get persistent labels; everything on hover
+    const showLabel = (n.kind === "hub" && n.degree >= 3 && scale > 0.9) || hoverNode === n;
     if (showLabel && !dimmed) {
       const label = n.title.length > 34 ? n.title.slice(0, 33) + "…" : n.title;
       ctx.font = `${n.kind === "hub" ? 600 : 400} ${Math.max(11 / scale, 2.4)}px "IBM Plex Mono", monospace`;

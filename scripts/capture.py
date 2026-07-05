@@ -333,7 +333,8 @@ TAG RULES:
 - Tags are categories for a knowledge graph: broad enough to recur across many
   saved items (e.g. "agentic-systems", "geoint", "personal-finance"), never
   one-off descriptors (bad: "this-specific-paper", "cool-video").
-- kebab-case, 1-3 of them, never zero.
+- Prefer FEWER, BROADER tags: 1-2 is the norm, 3 only when truly warranted.
+  Never zero.
 
 MEDIA TYPE: {media}
 SOURCE URL: {url}
@@ -361,10 +362,12 @@ New content proposed these tags: {proposed}
 
 Tags ALREADY IN USE in the graph: {existing}
 
-For each proposed tag decide: does it name the same or a near-identical concept
-as an EXISTING tag (synonym, singular/plural, broader/narrower phrasing of the
-same cluster)? If yes, replace it with that existing tag. If it is a genuinely
-distinct concept, keep it (normalized to clean kebab-case).
+For each proposed tag decide: can it live under an EXISTING tag (synonym,
+singular/plural, narrower/broader phrasing, or a subtopic that would naturally
+cluster with it)? If yes, replace it with that existing tag. STRONGLY prefer
+existing tags — a graph with few well-fed categories beats one with many thin
+ones. Mint a new tag ONLY when the content's core subject fits no existing tag
+even loosely; most content should map entirely onto existing tags.
 
 Return STRICT JSON only:
 {{

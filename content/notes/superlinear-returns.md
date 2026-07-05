@@ -29,3 +29,4 @@ Returns for performance are often superlinear (exponential or threshold-based), 
 ## Related
 
 [[personal-development]] · [[economics]] · [[strategy]]
+**See also:** [[do-things-that-dont-scale|Do Things that Don't Scale]] · [[lvmh-bernard-arnault-strategy|The History of LVMH and Bernard Arnault's Business Genius]] · [[paul-graham-yc-funding-billionaires-build|Paul Graham on How Y Combinator Funds Startups and Why Billionaires Build]]

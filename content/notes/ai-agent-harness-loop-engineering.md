@@ -29,3 +29,4 @@ This video offers a rapid 19-minute introduction to AI agent harness and loop en
 ## Related
 
 [[agentic-systems]] · [[llm-evals]] · [[rag-and-retrieval]]
+**See also:** [[ai-autonomous-ransomware-attack|First Documented Autonomous AI Ransomware Attack]] · [[anthropic-ai-drug-discovery|Anthropic Launches AI Drug Discovery Program for Neglected Diseases]]

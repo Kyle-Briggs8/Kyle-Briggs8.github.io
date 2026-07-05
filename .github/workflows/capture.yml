@@ -19,9 +19,9 @@ permissions:
   issues: write
   actions: write
 
-concurrency:
-  group: capture
-  cancel-in-progress: false
+# No concurrency group: GitHub keeps only ONE pending run per group, so rapid
+# bursts of captures silently cancelled the middle ones. Parallel runs are safe
+# now — the commit step self-heals push races (rebase + strip repair).
 
 jobs:
   capture:

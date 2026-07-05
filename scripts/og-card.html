@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!-- Social/OG card generator. Rendered headlessly by the deploy workflow
+     against the freshly built site (fetches /static/contentIndex.json
+     relative), screenshotted at exactly 1200x630, saved to
+     public/static/og-card.png. The homepage's socialImage frontmatter
+     points at that file. -->
+<html>
+<head>
+<meta charset="utf-8"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=JetBrains+Mono:wght@400;600&display=swap"/>
+<style>
+  * { margin:0; padding:0; }
+  body { width:1200px; height:630px; overflow:hidden; }
+  #card {
+    position:relative; width:1200px; height:630px; overflow:hidden;
+    background: radial-gradient(900px 500px at 75% 40%, #1c2030, #11131c 70%);
+  }
+  #graph { position:absolute; inset:0; }
+  #scrim {
+    position:absolute; inset:0;
+    background: linear-gradient(90deg, rgba(13,15,22,0.92) 0%, rgba(13,15,22,0.72) 34%, transparent 62%);
+    pointer-events:none;
+  }
+  #text { position:absolute; left:64px; top:0; bottom:0; display:flex; flex-direction:column; justify-content:center; gap:18px; max-width:480px; }
+  h1 { font:600 76px/1.05 Newsreader, serif; color:#f2efe7; letter-spacing:-0.015em; }
+  .sub { font:400 27px/1.4 Newsreader, serif; color:#b9bfd4; font-style:italic; }
+  .meta { margin-top:14px; font:600 17px "JetBrains Mono", monospace; letter-spacing:.12em; text-transform:uppercase; color:#8fa8d9; }
+  .url { font:400 15px "JetBrains Mono", monospace; color:#69708f; letter-spacing:.06em; }
+</style>
+</head>
+<body>
+<div id="card">
+  <div id="graph"></div>
+  <div id="scrim"></div>
+  <div id="text">
+    <h1>Kyle Briggs</h1>
+    <div class="sub">personal website &amp; second brain</div>
+    <div class="meta" id="meta">🧠 LIVE KNOWLEDGE GRAPH</div>
+    <div class="url">kyle-briggs8.github.io</div>
+  </div>
+</div>
+<script src="https://unpkg.com/force-graph@1.49.5/dist/force-graph.min.js"></script>
+<script>
+(async () => {
+  const idx = await fetch("/static/contentIndex.json").then(r => r.json());
+  const SKIP = (s) => s === "index" || s === "404" || s === "tags/index";
+  const kindOf = (s) => s.startsWith("tags/") ? "hub" : s.startsWith("notes/") ? "note" : s.startsWith("blog/") ? "blog" : "page";
+  const COLORS = { hub:"#cba6f7", note:"#89b4fa", blog:"#fab387", page:"#94e2d5" };
+  const nodes = [], byId = new Map();
+  for (const slug of Object.keys(idx)) {
+    if (SKIP(slug)) continue;
+    const n = { id: slug, kind: kindOf(slug), degree: 0 };
+    nodes.push(n); byId.set(slug, n);
+  }
+  const links = [];
+  for (const [slug, e] of Object.entries(idx)) {
+    if (!byId.has(slug)) continue;
+    for (const t of e.links || []) if (byId.has(t) && t !== slug) {
+      links.push({ source: slug, target: t });
+      byId.get(slug).degree++; byId.get(t).degree++;
+    }
+  }
+  const notes = nodes.filter(n => n.kind === "note").length;
+  const hubs = nodes.filter(n => n.kind === "hub").length;
+  document.getElementById("meta").textContent = `🧠 ${notes} NOTES · ${hubs} CLUSTERS · ALIVE`;
+  const r = (n) => (n.kind === "hub" ? 6 : 3.5) + Math.sqrt(n.degree) * 1.7;
+  const g = ForceGraph()(document.getElementById("graph"))
+    .width(1200).height(630)
+    .graphData({ nodes, links })
+    .backgroundColor("rgba(0,0,0,0)")
+    .enableZoomInteraction(false).enablePanInteraction(false)
+    .linkColor(() => "rgba(166,173,200,0.22)").linkWidth(1)
+    .nodeCanvasObject((n, ctx) => {
+      ctx.shadowColor = COLORS[n.kind]; ctx.shadowBlur = n.kind === "hub" ? 26 : 14;
+      ctx.beginPath(); ctx.arc(n.x, n.y, r(n), 0, 7); ctx.fillStyle = COLORS[n.kind]; ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+  g.d3Force("charge").strength(-140);
+  g.d3Force("center", null);
+  setTimeout(() => { g.centerAt(-170, 0, 0); g.zoom(1.5, 0); }, 1400);
+})();
+</script>
+</body>
+</html>

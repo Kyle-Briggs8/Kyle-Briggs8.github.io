@@ -2,6 +2,7 @@
 title: Kyle Briggs
 date: 2026-07-01
 publish: true
+socialImage: og-card.png
 ---
 Hey, my name is Kyle. I am studying Computer Science & Economics at the University of Virginia ('28), and I'm currently a cleared software engineering intern on Microsoft's Federal Cloud & AI team. I care about AI and agentic systems, gov-tech, and the places where startups meet government.
 

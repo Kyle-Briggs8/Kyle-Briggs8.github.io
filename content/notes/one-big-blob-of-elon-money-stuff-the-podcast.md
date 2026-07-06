@@ -4,9 +4,8 @@ source: https://open.spotify.com/episode/07wwPQFT7m24eKcOV2YsUE?si=0fr3J094RFuuI
 author: "Money Stuff: The Podcast"
 media: podcast
 date: 2026-07-05
-tags: []
+tags: [financial-markets, entrepreneurship]
 publish: true
-needs-attention: true
 ---
 
 <iframe src="https://open.spotify.com/embed/episode/07wwPQFT7m24eKcOV2YsUE" width="100%" height="152" frameborder="0" loading="lazy" allow="encrypted-media"></iframe>
@@ -27,4 +26,4 @@ _(no summary generated: gemini: 429 Client Error: Too Many Requests for url: htt
 
 ## Related
 
-_(untagged — needs attention)_
+[[financial-markets]] · [[entrepreneurship]]

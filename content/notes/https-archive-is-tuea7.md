@@ -3,9 +3,8 @@ title: "https://archive.is/TUEA7"
 source: https://archive.is/TUEA7
 media: article
 date: 2026-07-09
-tags: []
+tags: [ai-alignment, artificial-intelligence]
 publish: true
-needs-attention: true
 ---
 
 🔗 [https://archive.is/TUEA7](https://archive.is/TUEA7)
@@ -24,4 +23,4 @@ _(no summary generated: gemini: 503 Server Error: Service Unavailable for url: h
 
 ## Related
 
-_(untagged — needs attention)_
+[[ai-alignment]] · [[artificial-intelligence]]

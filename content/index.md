@@ -70,12 +70,12 @@ This site is two things: a [[blog/index|blog]] of writings, and a [[notes/index|
 <!-- Updated automatically by scripts/capture.py; keep the markers and the card format. -->
 <div class="card-grid">
 <!-- RECENT-NOTES:START -->
+<a class="card" href="/notes/recursive-self-improvement-evidence"><span class="card-kind">tweet</span><span class="card-title">Experimental Evidence of Recursive Self-Improvement in AI</span></a>
 <a class="card" href="/notes/https-archive-is-tuea7"><span class="card-kind">article</span><span class="card-title">https://archive.is/TUEA7</span></a>
 <a class="card" href="/notes/openai-introduces-gpt-live-voice-models"><span class="card-kind">tweet</span><span class="card-title">OpenAI Introduces GPT-Live Voice Models</span></a>
 <a class="card" href="/notes/nobel-chemist-yaghi-china-ai-materials"><span class="card-kind">article</span><span class="card-title">Nobel Laureate Chemist Omar Yaghi Moves to China to Lead AI Materials Lab</span></a>
 <a class="card" href="/notes/ken-griffin-miami-condo-demolition-citadel-campus"><span class="card-kind">article</span><span class="card-title">Ken Griffin Secretly Buys and Demolishes Miami Condo Building for Citadel Campus</span></a>
 <a class="card" href="/notes/vanguard-history-mutual-ownership"><span class="card-kind">podcast</span><span class="card-title">Vanguard: The Paradox of Client Ownership and Market Dominance</span></a>
-<a class="card" href="/notes/spacex-transporter-17-rideshare-concerns"><span class="card-kind">article</span><span class="card-title">SpaceX Transporter-17 Launch Amidst Industry Concerns Over Rideshare Program's Future</span></a>
 <!-- RECENT-NOTES:END -->
 </div>
 

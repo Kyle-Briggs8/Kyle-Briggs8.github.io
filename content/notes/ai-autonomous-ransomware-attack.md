@@ -4,7 +4,7 @@ source: https://www.the-independent.com/tech/security/ai-cyber-security-ransomwa
 author: "Anthony Cuthbertson"
 media: article
 date: 2026-07-03
-tags: [artificial-intelligence, cybersecurity, ransomware]
+tags: [artificial-intelligence, ransomware]
 publish: true
 ---
 
@@ -28,4 +28,4 @@ Security researchers have documented what they believe to be the first fully aut
 
 ## Related
 
-[[artificial-intelligence]] · [[cybersecurity]] · [[ransomware]]
+[[artificial-intelligence]] · [[ransomware]]

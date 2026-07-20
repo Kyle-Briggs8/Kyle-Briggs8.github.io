@@ -4,7 +4,7 @@ source: https://x.com/varickagents/status/2073149705060860025?s=12
 author: "Varick Agents"
 media: tweet
 date: 2026-07-04
-tags: [social-media, agentic-systems, information-sharing]
+tags: [agentic-systems, information-sharing, cognitive-science]
 publish: true
 ---
 
@@ -30,4 +30,4 @@ This entry references a tweet by Varick Agents, which primarily consists of a sh
 
 ## Related
 
-[[social-media]] · [[agentic-systems]] · [[information-sharing]]
+[[agentic-systems]] · [[information-sharing]] · [[cognitive-science]]

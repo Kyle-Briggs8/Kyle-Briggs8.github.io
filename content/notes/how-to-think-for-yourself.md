@@ -4,7 +4,7 @@ source: https://www.paulgraham.com/think.html
 author: "Paul Graham"
 media: article
 date: 2026-07-04
-tags: [decision-making, personal-development, career-advice]
+tags: [decision-making, personal-development]
 publish: true
 ---
 
@@ -28,4 +28,4 @@ Paul Graham distinguishes between professions requiring independent thought (lik
 
 ## Related
 
-[[decision-making]] · [[personal-development]] · [[career-advice]]
+[[decision-making]] · [[personal-development]]

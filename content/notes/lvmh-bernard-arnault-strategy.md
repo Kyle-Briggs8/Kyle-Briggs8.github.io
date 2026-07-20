@@ -4,7 +4,7 @@ source: https://open.spotify.com/episode/7lMY1C8AMFinpVMTgAH9D9?si=yF3cY4w5Rrqgk
 author: "Acquired"
 media: podcast
 date: 2026-07-05
-tags: [strategy, corporate-history, luxury-industry]
+tags: [strategy, corporate-history]
 publish: true
 ---
 
@@ -29,4 +29,4 @@ This podcast episode details the complete history of LVMH and how Bernard Arnaul
 
 ## Related
 
-[[strategy]] · [[corporate-history]] · [[luxury-industry]]
+[[strategy]] · [[corporate-history]]

@@ -4,7 +4,7 @@ source: https://www.cnbc.com/2026/06/30/anthropic-launches-ai-drug-discovery-pro
 author: "Angelica Peebles; Ashley Capoot"
 media: article
 date: 2026-07-03
-tags: [artificial-intelligence, biotechnology, healthcare-innovation]
+tags: [artificial-intelligence, biotechnology, entrepreneurship]
 publish: true
 ---
 
@@ -28,4 +28,4 @@ Anthropic is starting an internal AI drug discovery program, focusing on 'neglec
 
 ## Related
 
-[[artificial-intelligence]] · [[biotechnology]] · [[healthcare-innovation]]
+[[artificial-intelligence]] · [[biotechnology]] · [[entrepreneurship]]

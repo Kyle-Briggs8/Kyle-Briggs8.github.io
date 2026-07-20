@@ -4,7 +4,7 @@ source: https://www.economist.com/briefing/2026/06/25/ai-models-values-are-very-
 author: "The Economist"
 media: article
 date: 2026-07-03
-tags: [artificial-intelligence, ethics, ai-alignment]
+tags: [artificial-intelligence, ai-alignment]
 publish: true
 needs-attention: true
 ---
@@ -29,4 +29,4 @@ This article from The Economist likely explores the fundamental differences in e
 
 ## Related
 
-[[artificial-intelligence]] · [[ethics]] · [[ai-alignment]]
+[[artificial-intelligence]] · [[ai-alignment]]

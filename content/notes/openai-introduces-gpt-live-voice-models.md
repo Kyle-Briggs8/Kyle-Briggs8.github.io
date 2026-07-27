@@ -4,7 +4,7 @@ source: https://x.com/openai/status/2074907025537224840?s=12
 author: "OpenAI"
 media: tweet
 date: 2026-07-09
-tags: [artificial-intelligence, human-computer-interaction]
+tags: [artificial-intelligence, cognitive-science]
 publish: true
 ---
 
@@ -30,6 +30,6 @@ OpenAI has launched GPT-Live, a new generation of voice models designed for more
 
 ## Related
 
-[[artificial-intelligence]] · [[human-computer-interaction]]
+[[artificial-intelligence]] · [[cognitive-science]]
 
 **See also:** [[brain2qwerty-non-invasive-brain-to-text|From Brain Waves to Words: Brain2Qwerty Offers a New Path to Communication Without Surgery]]

@@ -4,7 +4,7 @@ source: https://open.spotify.com/episode/7JgSpMvx3S9G9zgmZLLQHI?si=ABi03vUFQAilw
 author: "Acquired"
 media: podcast
 date: 2026-07-08
-tags: [investing, corporate-history, personal-finance]
+tags: [investing, corporate-history]
 publish: true
 ---
 
@@ -30,6 +30,6 @@ Vanguard, founded on a 'revenge plot' by Jack Bogle, operates as a unique client
 
 ## Related
 
-[[investing]] · [[corporate-history]] · [[personal-finance]]
+[[investing]] · [[corporate-history]]
 
 **See also:** [[lvmh-bernard-arnault-strategy|The History of LVMH and Bernard Arnault's Business Genius]]

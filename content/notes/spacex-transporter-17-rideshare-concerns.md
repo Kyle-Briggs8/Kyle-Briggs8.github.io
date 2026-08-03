@@ -4,7 +4,7 @@ source: https://spacenews.com/spacex-launches-transporter-17-amid-concerns-about
 author: "Jeff Foust"
 media: article
 date: 2026-07-08
-tags: [space-industry]
+tags: [entrepreneurship]
 publish: true
 ---
 
@@ -28,6 +28,6 @@ SpaceX successfully launched its Transporter-17 rideshare mission with 81 payloa
 
 ## Related
 
-[[space-industry]]
+[[entrepreneurship]]
 
 **See also:** [[one-big-blob-of-elon-money-stuff-the-podcast|One Big Blob of Elon (Money Stuff: The Podcast)]] · [[paul-graham-yc-funding-billionaires-build|Paul Graham on How Y Combinator Funds Startups and Why Billionaires Build]]

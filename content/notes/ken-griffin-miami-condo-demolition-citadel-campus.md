@@ -4,7 +4,7 @@ source: https://finance.yahoo.com/real-estate/articles/hedge-fund-billionaire-ke
 author: "Lauren Elkies Schram"
 media: article
 date: 2026-07-08
-tags: [investing, financial-markets, urban-development]
+tags: [investing, financial-markets, strategy]
 publish: true
 ---
 
@@ -28,6 +28,6 @@ Hedge fund billionaire Ken Griffin secretly spent $125 million over three years 
 
 ## Related
 
-[[investing]] · [[financial-markets]] · [[urban-development]]
+[[investing]] · [[financial-markets]] · [[strategy]]
 
 **See also:** [[lvmh-bernard-arnault-strategy|The History of LVMH and Bernard Arnault's Business Genius]] · [[money-stuff-market-structure-hedge-funds-tokenization|Money Stuff: Market Structure, Hedge Funds, and Tokenization]] · [[paul-graham-yc-funding-billionaires-build|Paul Graham on How Y Combinator Funds Startups and Why Billionaires Build]]

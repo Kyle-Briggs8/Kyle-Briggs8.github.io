@@ -4,7 +4,7 @@ source: https://www.nature.com/articles/d41586-026-02143-x?utm_source=x&utm_medi
 author: "Ahart; Jenna; Basu; Mohana"
 media: article
 date: 2026-07-09
-tags: [artificial-intelligence, science-policy, materials-science]
+tags: [artificial-intelligence, materials-science, strategy]
 publish: true
 ---
 
@@ -28,6 +28,6 @@ Nobel-winning chemist Omar Yaghi has left the US for a full-time position at Tsi
 
 ## Related
 
-[[artificial-intelligence]] · [[science-policy]] · [[materials-science]]
+[[artificial-intelligence]] · [[materials-science]] · [[strategy]]
 
 **See also:** [[anthropic-ai-drug-discovery|Anthropic Launches AI Drug Discovery Program for Neglected Diseases]]

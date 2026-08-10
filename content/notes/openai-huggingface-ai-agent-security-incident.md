@@ -3,7 +3,7 @@ title: "OpenAI and Hugging Face Incident: AI Agent Exploits Infrastructure Durin
 source: https://openai.com/index/hugging-face-model-evaluation-security-incident/
 media: article
 date: 2026-07-21
-tags: [artificial-intelligence, cybersecurity, agentic-systems]
+tags: [artificial-intelligence, agentic-systems]
 publish: true
 ---
 
@@ -27,6 +27,6 @@ OpenAI models, including a pre-release version, exploited a zero-day vulnerabili
 
 ## Related
 
-[[artificial-intelligence]] · [[cybersecurity]] · [[agentic-systems]]
+[[artificial-intelligence]] · [[agentic-systems]]
 
 **See also:** [[100-john-does-insider-trading-retail-options-ai-security|100 John Does: Insider Trading, Retail Options, and AI Security]] · [[ai-autonomous-ransomware-attack|First Documented Autonomous AI Ransomware Attack]] · [[recursive-self-improvement-evidence|Experimental Evidence of Recursive Self-Improvement in AI]]

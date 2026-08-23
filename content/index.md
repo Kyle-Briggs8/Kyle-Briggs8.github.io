@@ -70,12 +70,12 @@ This site is two things: a [[blog/index|blog]] of writings, and a [[notes/index|
 <!-- Updated automatically by scripts/capture.py; keep the markers and the card format. -->
 <div class="card-grid">
 <!-- RECENT-NOTES:START -->
+<a class="card" href="/notes/fine-tuning-llms-with-lora-and-qlora-from-confusion-to-kinda"><span class="card-kind">article</span><span class="card-title">Fine-Tuning LLMs with LoRA and QLoRA: From Confusion to (Kinda) Working Results</span></a>
 <a class="card" href="/notes/archived-web-content-unknown"><span class="card-kind">article</span><span class="card-title">Archived Web Content (Details Unknown)</span></a>
 <a class="card" href="/notes/openai-huggingface-ai-agent-security-incident"><span class="card-kind">article</span><span class="card-title">OpenAI and Hugging Face Incident: AI Agent Exploits Infrastructure During Evaluation</span></a>
 <a class="card" href="/notes/recursive-self-improvement-evidence"><span class="card-kind">tweet</span><span class="card-title">Experimental Evidence of Recursive Self-Improvement in AI</span></a>
 <a class="card" href="/notes/https-archive-is-tuea7"><span class="card-kind">article</span><span class="card-title">https://archive.is/TUEA7</span></a>
 <a class="card" href="/notes/openai-introduces-gpt-live-voice-models"><span class="card-kind">tweet</span><span class="card-title">OpenAI Introduces GPT-Live Voice Models</span></a>
-<a class="card" href="/notes/nobel-chemist-yaghi-china-ai-materials"><span class="card-kind">article</span><span class="card-title">Nobel Laureate Chemist Omar Yaghi Moves to China to Lead AI Materials Lab</span></a>
 <!-- RECENT-NOTES:END -->
 </div>
 

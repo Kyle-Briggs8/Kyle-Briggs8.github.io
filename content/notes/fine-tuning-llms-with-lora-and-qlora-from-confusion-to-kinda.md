@@ -4,9 +4,8 @@ source: https://medium.com/@dsh.2065/fine-tuning-llms-with-lora-and-qlora-from-c
 author: "Deepesh Sharma"
 media: article
 date: 2026-08-23
-tags: []
+tags: [artificial-intelligence, ideas-worth-stealing]
 publish: true
-needs-attention: true
 ---
 
 🔗 [Fine-Tuning LLMs with LoRA and QLoRA: From Confusion to (Kinda) Working Results](https://medium.com/@dsh.2065/fine-tuning-llms-with-lora-and-qlora-from-confusion-to-kinda-working-results-89b348bcce71)
@@ -25,4 +24,4 @@ _(no summary generated: gemini: 503 Server Error: Service Unavailable for url: h
 
 ## Related
 
-_(untagged — needs attention)_
+[[artificial-intelligence]] · [[ideas-worth-stealing]]
